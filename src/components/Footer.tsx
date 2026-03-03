@@ -1,5 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronDown } from "lucide-react";
+
+const FooterDropdown = ({ title, children }: { title: string; children: React.ReactNode }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full md:hidden font-display text-gold-light font-semibold mb-2"
+      >
+        {title}
+        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </button>
+      <h4 className="hidden md:block font-display text-gold-light font-semibold mb-4">{title}</h4>
+      <div className={`flex flex-col gap-3 overflow-hidden transition-all duration-300 md:max-h-none ${open ? "max-h-96 mt-2" : "max-h-0 md:max-h-none"}`}>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const Footer = () => {
   return (
@@ -29,49 +50,40 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-display text-gold-light font-semibold mb-4">Quick Links</h4>
-            <div className="flex flex-col gap-3">
-              {["About", "Services", "Portfolio", "Contact"].map((link) => (
-                <Link
-                  key={link}
-                  to={`/${link.toLowerCase()}`}
-                  className="text-gold-light/50 text-sm hover:text-gold transition-colors"
-                >
-                  {link}
-                </Link>
-              ))}
-            </div>
-          </div>
+          <FooterDropdown title="Quick Links">
+            {["About", "Services", "Portfolio", "Contact"].map((link) => (
+              <Link
+                key={link}
+                to={`/${link.toLowerCase()}`}
+                className="text-gold-light/50 text-sm hover:text-gold transition-colors"
+              >
+                {link}
+              </Link>
+            ))}
+          </FooterDropdown>
 
           {/* Services */}
-          <div>
-            <h4 className="font-display text-gold-light font-semibold mb-4">Services</h4>
-            <div className="flex flex-col gap-3">
-              {["Wedding Planning", "Corporate Events", "Birthday Parties", "Decoration", "Venue Booking"].map((s) => (
-                <span key={s} className="text-gold-light/50 text-sm">{s}</span>
-              ))}
-            </div>
-          </div>
+          <FooterDropdown title="Services">
+            {["Wedding Planning", "Corporate Events", "Birthday Parties", "Decoration", "Venue Booking"].map((s) => (
+              <span key={s} className="text-gold-light/50 text-sm">{s}</span>
+            ))}
+          </FooterDropdown>
 
           {/* Contact */}
-          <div>
-            <h4 className="font-display text-gold-light font-semibold mb-4">Contact</h4>
-            <div className="flex flex-col gap-4">
-              <a href="tel:+1234567890" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
-                <Phone className="w-4 h-4 shrink-0" />
-                +1 234 567 890
-              </a>
-              <a href="mailto:info@maharshaevents.com" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
-                <Mail className="w-4 h-4 shrink-0" />
-                info@maharshaevents.com
-              </a>
-              <div className="flex items-start gap-3 text-gold-light/50 text-sm">
-                <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-                123 Event Avenue, Mumbai, India
-              </div>
+          <FooterDropdown title="Contact">
+            <a href="tel:+1234567890" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
+              <Phone className="w-4 h-4 shrink-0" />
+              +1 234 567 890
+            </a>
+            <a href="mailto:info@maharshaevents.com" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
+              <Mail className="w-4 h-4 shrink-0" />
+              info@maharshaevents.com
+            </a>
+            <div className="flex items-start gap-3 text-gold-light/50 text-sm">
+              <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
+              123 Event Avenue, Mumbai, India
             </div>
-          </div>
+          </FooterDropdown>
         </div>
 
         <div className="border-t border-gold/10 mt-12 pt-8 text-center">
