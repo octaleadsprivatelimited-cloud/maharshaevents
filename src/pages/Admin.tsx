@@ -34,44 +34,15 @@ type TabId = (typeof NAV_ITEMS)[number]["id"];
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<TabId>("enquiries");
-  const [user, setUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        const email = firebaseUser.email?.toLowerCase() || "";
-        if (ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(email)) {
-          setUser(firebaseUser);
-        } else {
-          signOut(auth);
-          toast.error("You are not authorized to access this panel");
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-      setAuthLoading(false);
-    });
-    return () => unsub();
-  }, []);
+  // TODO: Re-enable auth when Firebase is connected
+  // const [user, setUser] = useState<User | null>(null);
+  // const [authLoading, setAuthLoading] = useState(true);
+  const bypassAuth = true; // Set to false once Firebase is configured
 
   const handleLogout = async () => {
     await signOut(auth);
     toast.success("Logged out");
   };
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <AdminLogin />;
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,7 +59,7 @@ const Admin = () => {
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden text-sm text-muted-foreground md:inline">
-              {user.email}
+              admin@maharshaevents.com
             </span>
             <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5">
               <LogOut className="h-3.5 w-3.5" /> Logout
