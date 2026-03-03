@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, Trash2, Bell, BellRing, ToggleLeft, ToggleRight, Megaphone } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Trash2, Bell, BellRing, ToggleLeft, ToggleRight, Megaphone, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +13,23 @@ const NotificationManager = () => {
   const [message, setMessage] = useState("");
   const [type, setType] = useState<"banner" | "toast">("banner");
   const [imageUrl, setImageUrl] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be under 2MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setImageUrl(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handleAdd = () => {
     if (!title.trim() || !message.trim()) {
@@ -71,23 +88,34 @@ const NotificationManager = () => {
             {type === "banner" && (
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Promotional Image URL <span className="text-muted-foreground/50">(optional)</span>
+                  Promotional Image <span className="text-muted-foreground/50">(optional)</span>
                 </label>
-                <Input
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://example.com/promo-image.jpg"
-                />
-                {imageUrl.trim() && (
-                  <div className="mt-2 overflow-hidden rounded-md border border-border">
-                    <img
-                      src={imageUrl}
-                      alt="Preview"
-                      className="h-32 w-full object-cover"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
+                {imageUrl ? (
+                  <div className="relative mt-1 overflow-hidden rounded-md border border-border">
+                    <img src={imageUrl} alt="Preview" className="h-36 w-full object-cover" />
+                    <button
+                      onClick={() => { setImageUrl(""); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                      className="absolute right-2 top-2 rounded-full bg-background/80 p-1 text-muted-foreground hover:text-destructive"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
                   </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="mt-1 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-border py-8 text-sm text-muted-foreground transition-colors hover:border-accent hover:text-foreground"
+                  >
+                    <Upload className="h-4 w-4" /> Click to upload image
+                  </button>
                 )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
               </div>
             )}
           </div>
