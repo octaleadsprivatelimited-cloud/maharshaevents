@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Plus, Trash2, Youtube } from "lucide-react";
+import { Plus, Trash2, Youtube, PlayCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useVideos } from "@/lib/useFirebaseData";
 import { toast } from "sonner";
 
@@ -27,7 +27,7 @@ const VideoManager = () => {
     }
     const videoId = extractYouTubeId(url.trim());
     if (!videoId) {
-      toast.error("Invalid YouTube URL");
+      toast.error("Invalid YouTube URL. Use a standard youtube.com or youtu.be link.");
       return;
     }
     addVideo({ youtubeUrl: url.trim(), title: title.trim(), description: description.trim() });
@@ -38,79 +38,88 @@ const VideoManager = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Add Video Form */}
-      <Card className="bg-navy border-gold/20">
-        <CardHeader>
-          <CardTitle className="text-gold-light flex items-center gap-2 text-lg">
-            <Youtube className="w-5 h-5" /> Add YouTube Video
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="text-gold-light/70 text-sm mb-1 block">YouTube URL</label>
-            <Input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
-              className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30"
-            />
+    <div className="space-y-8">
+      {/* Add Video */}
+      <Card className="border-border">
+        <CardContent className="p-6">
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Youtube className="h-4 w-4 text-destructive" /> Add YouTube Video
+          </h3>
+
+          <div className="space-y-3">
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">YouTube URL</label>
+              <Input
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Title</label>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Event Highlight Reel"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Description</label>
+                <Input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Short description..."
+                />
+              </div>
+            </div>
           </div>
-          <div>
-            <label className="text-gold-light/70 text-sm mb-1 block">Title</label>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Event Highlight Reel"
-              className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30"
-            />
-          </div>
-          <div>
-            <label className="text-gold-light/70 text-sm mb-1 block">Description (optional)</label>
-            <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="A short description of the video..."
-              className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30 min-h-[60px]"
-            />
-          </div>
-          <Button onClick={handleAdd} variant="hero" size="sm">
-            <Plus className="w-4 h-4 mr-1" /> Add Video
+
+          <Button onClick={handleAdd} className="mt-4 gap-1.5">
+            <Plus className="h-4 w-4" /> Add Video
           </Button>
         </CardContent>
       </Card>
 
       {/* Video List */}
       <div>
-        <h3 className="text-gold-light/70 text-sm font-medium mb-3">
-          Videos ({videos.length})
-        </h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Videos</h3>
+          <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+            {videos.length} videos
+          </span>
+        </div>
+
         {videos.length === 0 ? (
-          <Card className="bg-navy border-gold/10">
-            <CardContent className="py-12 text-center text-gold-light/40">
-              No videos yet. Add your first YouTube video above.
-            </CardContent>
-          </Card>
+          <div className="flex flex-col items-center rounded-xl border border-dashed border-border py-16 text-center">
+            <PlayCircle className="mb-3 h-10 w-10 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">No videos yet</p>
+            <p className="mt-1 text-xs text-muted-foreground/60">Add your first YouTube video above</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {videos.map((video) => {
               const videoId = extractYouTubeId(video.youtubeUrl);
               return (
-                <Card key={video.id} className="bg-navy border-gold/15 overflow-hidden group">
-                  <div className="aspect-video">
+                <Card key={video.id} className="overflow-hidden border-border">
+                  <div className="aspect-video bg-muted">
                     <iframe
                       src={`https://www.youtube.com/embed/${videoId}`}
                       title={video.title}
-                      className="w-full h-full"
+                      className="h-full w-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
                   </div>
-                  <CardContent className="p-3 flex items-start justify-between gap-2">
+                  <CardContent className="flex items-start justify-between gap-2 p-3">
                     <div className="min-w-0">
-                      <p className="text-gold-light text-sm font-medium truncate">{video.title || "Untitled"}</p>
+                      <p className="truncate text-sm font-medium text-foreground">
+                        {video.title || "Untitled"}
+                      </p>
                       {video.description && (
-                        <p className="text-gold-light/50 text-xs mt-0.5 line-clamp-2">{video.description}</p>
+                        <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                          {video.description}
+                        </p>
                       )}
                     </div>
                     <button
@@ -118,9 +127,9 @@ const VideoManager = () => {
                         removeVideo(video.id);
                         toast.success("Video removed");
                       }}
-                      className="text-destructive hover:text-destructive/80 shrink-0 p-1"
+                      className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </CardContent>
                 </Card>
