@@ -8,9 +8,9 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { toast } from "sonner";
 
 const contactInfo = [
-  { icon: Phone, label: "Phone", value: "+1 234 567 890", href: "tel:+1234567890" },
+  { icon: Phone, label: "Phone", value: "+91 7893330301", href: "tel:+917893330301" },
   { icon: Mail, label: "Email", value: "info@maharshaevents.com", href: "mailto:info@maharshaevents.com" },
-  { icon: MapPin, label: "Address", value: "123 Event Avenue, Mumbai, India", href: "#" },
+  { icon: MapPin, label: "Address", value: "Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir, Telangana 500091", href: "#" },
   { icon: Clock, label: "Hours", value: "Mon - Sat: 9AM - 7PM", href: "#" },
 ];
 
@@ -114,7 +114,7 @@ const Contact = () => {
       <section className="h-80 bg-muted flex items-center justify-center">
         <div className="text-center text-muted-foreground">
           <MapPin className="w-10 h-10 mx-auto mb-3 text-gold" />
-          <p className="font-display text-lg">123 Event Avenue, Mumbai, India</p>
+          <p className="font-display text-lg">Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir, Telangana 500091</p>
           <p className="text-sm mt-1">Google Maps integration can be added here</p>
         </div>
       </section>

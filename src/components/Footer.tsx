@@ -79,9 +79,9 @@ const Footer = () => {
 
           {/* Contact */}
           <FooterDropdown title="Contact">
-            <a href="tel:+1234567890" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
+            <a href="tel:+917893330301" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
               <Phone className="w-4 h-4 shrink-0" />
-              +1 234 567 890
+              +91 7893330301
             </a>
             <a href="mailto:info@maharshaevents.com" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
               <Mail className="w-4 h-4 shrink-0" />
@@ -89,7 +89,7 @@ const Footer = () => {
             </a>
             <div className="flex items-start gap-3 text-gold-light/50 text-sm">
               <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-              123 Event Avenue, Mumbai, India
+              Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir, Telangana 500091
             </div>
           </FooterDropdown>
         </div>
