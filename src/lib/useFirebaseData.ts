@@ -26,11 +26,37 @@ export interface SiteNotification {
   createdAt: number;
 }
 
+export type EnquirySource = "booking" | "contact";
+export type FollowUpStatus = "new" | "contacted" | "call_done" | "proposal_sent" | "converted" | "closed";
+
+export interface EnquiryNote {
+  id: string;
+  text: string;
+  createdAt: number;
+}
+
+export interface Enquiry {
+  id: string;
+  source: EnquirySource;
+  name: string;
+  email: string;
+  phone?: string;
+  eventType?: string;
+  eventDate?: string;
+  budget?: string;
+  subject?: string;
+  message: string;
+  status: FollowUpStatus;
+  notes: EnquiryNote[];
+  createdAt: number;
+}
+
 // LocalStorage fallback until Firebase is configured
 const STORAGE_KEYS = {
   images: "maharsha_gallery_images",
   videos: "maharsha_videos",
   notifications: "maharsha_notifications",
+  enquiries: "maharsha_enquiries",
 };
 
 function getLocal<T>(key: string): T[] {
@@ -111,4 +137,65 @@ export function useNotifications() {
   };
 
   return { notifications, addNotification, removeNotification, toggleNotification };
+}
+
+export function useEnquiries() {
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  useEffect(() => setEnquiries(getLocal(STORAGE_KEYS.enquiries)), []);
+
+  const addEnquiry = (e: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) => {
+    const newE: Enquiry = {
+      ...e,
+      id: crypto.randomUUID(),
+      createdAt: Date.now(),
+      status: "new",
+      notes: [],
+    };
+    const updated = [newE, ...enquiries];
+    setEnquiries(updated);
+    setLocal(STORAGE_KEYS.enquiries, updated);
+  };
+
+  const updateStatus = (id: string, status: FollowUpStatus) => {
+    const updated = enquiries.map((e) => (e.id === id ? { ...e, status } : e));
+    setEnquiries(updated);
+    setLocal(STORAGE_KEYS.enquiries, updated);
+  };
+
+  const addNote = (enquiryId: string, text: string) => {
+    const updated = enquiries.map((e) =>
+      e.id === enquiryId
+        ? {
+            ...e,
+            notes: [
+              ...e.notes,
+              { id: crypto.randomUUID(), text, createdAt: Date.now() },
+            ],
+          }
+        : e
+    );
+    setEnquiries(updated);
+    setLocal(STORAGE_KEYS.enquiries, updated);
+  };
+
+  const removeEnquiry = (id: string) => {
+    const updated = enquiries.filter((e) => e.id !== id);
+    setEnquiries(updated);
+    setLocal(STORAGE_KEYS.enquiries, updated);
+  };
+
+  return { enquiries, addEnquiry, updateStatus, addNote, removeEnquiry };
+}
+
+// Standalone function to save enquiry from public forms (without hook)
+export function saveEnquiry(data: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) {
+  const existing = getLocal<Enquiry>(STORAGE_KEYS.enquiries);
+  const newE: Enquiry = {
+    ...data,
+    id: crypto.randomUUID(),
+    createdAt: Date.now(),
+    status: "new",
+    notes: [],
+  };
+  setLocal(STORAGE_KEYS.enquiries, [newE, ...existing]);
 }
