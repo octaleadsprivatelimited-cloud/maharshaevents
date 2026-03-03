@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Plus, Trash2, Upload } from "lucide-react";
+import { useState, useRef, useCallback } from "react";
+import { Plus, Trash2, Upload, ImageIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useGalleryImages } from "@/lib/useFirebaseData";
 import { toast } from "sonner";
 
@@ -10,61 +10,137 @@ const CATEGORIES = ["Wedding", "Birthday", "Corporate", "Decoration", "Venue", "
 
 const ImageManager = () => {
   const { images, addImage, removeImage } = useGalleryImages();
-  const [url, setUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [category, setCategory] = useState("Wedding");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleAdd = () => {
-    if (!url.trim()) {
-      toast.error("Please enter an image URL");
+  const handleFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
       return;
     }
-    addImage({ url: url.trim(), caption: caption.trim(), category });
-    setUrl("");
-    setCaption("");
-    toast.success("Image added successfully");
-  };
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image must be under 10MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }, []);
 
-  const handleDelete = (id: string) => {
-    removeImage(id);
-    toast.success("Image removed");
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragActive(false);
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    },
+    [handleFile]
+  );
+
+  const handleAdd = () => {
+    if (!preview) {
+      toast.error("Please upload an image");
+      return;
+    }
+    addImage({ url: preview, caption: caption.trim(), category });
+    setPreview(null);
+    setCaption("");
+    if (fileRef.current) fileRef.current.value = "";
+    toast.success("Image added to gallery");
   };
 
   return (
-    <div className="space-y-6">
-      {/* Add Image Form */}
-      <Card className="bg-navy border-gold/20">
-        <CardHeader>
-          <CardTitle className="text-gold-light flex items-center gap-2 text-lg">
-            <Upload className="w-5 h-5" /> Add New Image
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="text-gold-light/70 text-sm mb-1 block">Image URL</label>
-            <Input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30"
+    <div className="space-y-8">
+      {/* Upload Section */}
+      <Card className="border-border">
+        <CardContent className="p-6">
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Upload className="h-4 w-4 text-accent" /> Upload New Image
+          </h3>
+
+          {/* Drop Zone */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+            onDragLeave={() => setDragActive(false)}
+            onDrop={handleDrop}
+            onClick={() => fileRef.current?.click()}
+            className={`relative cursor-pointer rounded-xl border-2 border-dashed transition-colors ${
+              dragActive
+                ? "border-accent bg-accent/5"
+                : preview
+                ? "border-border bg-muted/30"
+                : "border-border hover:border-accent/50 hover:bg-muted/50"
+            } ${preview ? "p-3" : "p-8"}`}
+          >
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleFile(file);
+              }}
             />
+
+            {preview ? (
+              <div className="relative">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="mx-auto max-h-48 rounded-lg object-contain"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPreview(null);
+                    if (fileRef.current) fileRef.current.value = "";
+                  }}
+                  className="absolute -right-1 -top-1 rounded-full bg-destructive p-1 text-destructive-foreground shadow-sm"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-3 rounded-full bg-muted p-3">
+                  <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium text-foreground">
+                  Drop image here or click to browse
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  PNG, JPG, WEBP up to 10MB
+                </p>
+              </div>
+            )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          {/* Caption & Category */}
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="text-gold-light/70 text-sm mb-1 block">Caption</label>
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                Caption
+              </label>
               <Input
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                placeholder="Beautiful wedding setup"
-                className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30"
+                placeholder="Describe this image..."
               />
             </div>
             <div>
-              <label className="text-gold-light/70 text-sm mb-1 block">Category</label>
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                Category
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 rounded-md border border-gold/20 bg-navy-dark text-gold-light px-3 text-sm"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -72,48 +148,67 @@ const ImageManager = () => {
               </select>
             </div>
           </div>
-          <Button onClick={handleAdd} variant="hero" size="sm">
-            <Plus className="w-4 h-4 mr-1" /> Add Image
+
+          <Button onClick={handleAdd} className="mt-4 gap-1.5" disabled={!preview}>
+            <Plus className="h-4 w-4" /> Add to Gallery
           </Button>
         </CardContent>
       </Card>
 
-      {/* Image Grid */}
+      {/* Gallery Grid */}
       <div>
-        <h3 className="text-gold-light/70 text-sm font-medium mb-3">
-          Gallery ({images.length} images)
-        </h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">
+            Gallery
+          </h3>
+          <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+            {images.length} images
+          </span>
+        </div>
+
         {images.length === 0 ? (
-          <Card className="bg-navy border-gold/10">
-            <CardContent className="py-12 text-center text-gold-light/40">
-              No images yet. Add your first image above.
-            </CardContent>
-          </Card>
+          <div className="flex flex-col items-center rounded-xl border border-dashed border-border py-16 text-center">
+            <ImageIcon className="mb-3 h-10 w-10 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">No images yet</p>
+            <p className="mt-1 text-xs text-muted-foreground/60">Upload your first image above</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {images.map((img) => (
-              <Card key={img.id} className="bg-navy border-gold/15 overflow-hidden group">
-                <div className="aspect-video bg-navy-dark relative">
+              <div
+                key={img.id}
+                className="group relative overflow-hidden rounded-lg border border-border bg-card"
+              >
+                <div className="aspect-square">
                   <img
                     src={img.url}
                     alt={img.caption}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/placeholder.svg";
                     }}
                   />
-                  <button
-                    onClick={() => handleDelete(img.id)}
-                    className="absolute top-2 right-2 bg-destructive/90 text-destructive-foreground p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
-                <CardContent className="p-3">
-                  <p className="text-gold-light text-sm font-medium truncate">{img.caption || "Untitled"}</p>
-                  <span className="text-gold/60 text-xs">{img.category}</span>
-                </CardContent>
-              </Card>
+                {/* Overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="p-2.5">
+                    <p className="truncate text-xs font-medium text-white">
+                      {img.caption || "Untitled"}
+                    </p>
+                    <p className="text-[10px] text-white/60">{img.category}</p>
+                  </div>
+                </div>
+                {/* Delete */}
+                <button
+                  onClick={() => {
+                    removeImage(img.id);
+                    toast.success("Image removed");
+                  }}
+                  className="absolute right-1.5 top-1.5 rounded-md bg-destructive/90 p-1 text-destructive-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             ))}
           </div>
         )}

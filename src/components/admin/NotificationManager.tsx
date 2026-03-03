@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Plus, Trash2, Bell, BellRing, ToggleLeft, ToggleRight } from "lucide-react";
+import { Plus, Trash2, Bell, BellRing, ToggleLeft, ToggleRight, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNotifications, type SiteNotification } from "@/lib/useFirebaseData";
+import { Card, CardContent } from "@/components/ui/card";
+import { useNotifications } from "@/lib/useFirebaseData";
 import { toast } from "sonner";
 
 const NotificationManager = () => {
@@ -24,99 +24,120 @@ const NotificationManager = () => {
     toast.success("Notification created");
   };
 
+  const activeCount = notifications.filter((n) => n.active).length;
+
   return (
-    <div className="space-y-6">
-      {/* Add Notification */}
-      <Card className="bg-navy border-gold/20">
-        <CardHeader>
-          <CardTitle className="text-gold-light flex items-center gap-2 text-lg">
-            <BellRing className="w-5 h-5" /> Create Notification
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="space-y-8">
+      {/* Create Notification */}
+      <Card className="border-border">
+        <CardContent className="p-6">
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
+            <BellRing className="h-4 w-4 text-accent" /> Create Notification
+          </h3>
+
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Title</label>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Special Offer!"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Type</label>
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value as "banner" | "toast")}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="banner">Banner / Modal</option>
+                  <option value="toast">Toast Notification</option>
+                </select>
+              </div>
+            </div>
             <div>
-              <label className="text-gold-light/70 text-sm mb-1 block">Title</label>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Special Offer!"
-                className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30"
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Message</label>
+              <Textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Get 20% off on wedding packages this month!"
+                className="min-h-[80px]"
               />
             </div>
-            <div>
-              <label className="text-gold-light/70 text-sm mb-1 block">Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value as "banner" | "toast")}
-                className="w-full h-10 rounded-md border border-gold/20 bg-navy-dark text-gold-light px-3 text-sm"
-              >
-                <option value="banner">Banner / Modal</option>
-                <option value="toast">Toast Notification</option>
-              </select>
-            </div>
           </div>
-          <div>
-            <label className="text-gold-light/70 text-sm mb-1 block">Message</label>
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Get 20% off on wedding packages this month!"
-              className="bg-navy-dark border-gold/20 text-gold-light placeholder:text-gold-light/30 min-h-[60px]"
-            />
-          </div>
-          <Button onClick={handleAdd} variant="hero" size="sm">
-            <Plus className="w-4 h-4 mr-1" /> Create Notification
+
+          <Button onClick={handleAdd} className="mt-4 gap-1.5">
+            <Plus className="h-4 w-4" /> Create Notification
           </Button>
         </CardContent>
       </Card>
 
       {/* Notification List */}
       <div>
-        <h3 className="text-gold-light/70 text-sm font-medium mb-3">
-          Notifications ({notifications.length})
-        </h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+          <div className="flex items-center gap-2">
+            {activeCount > 0 && (
+              <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+                {activeCount} active
+              </span>
+            )}
+            <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+              {notifications.length} total
+            </span>
+          </div>
+        </div>
+
         {notifications.length === 0 ? (
-          <Card className="bg-navy border-gold/10">
-            <CardContent className="py-12 text-center text-gold-light/40">
-              No notifications yet. Create one above to display on the site.
-            </CardContent>
-          </Card>
+          <div className="flex flex-col items-center rounded-xl border border-dashed border-border py-16 text-center">
+            <Megaphone className="mb-3 h-10 w-10 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">No notifications yet</p>
+            <p className="mt-1 text-xs text-muted-foreground/60">Create one to display on the site</p>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {notifications.map((n) => (
-              <Card key={n.id} className={`bg-navy border-gold/15 ${!n.active ? "opacity-50" : ""}`}>
-                <CardContent className="p-4 flex items-start gap-4">
-                  <div className="shrink-0 mt-1">
+              <Card
+                key={n.id}
+                className={`border-border transition-opacity ${!n.active ? "opacity-50" : ""}`}
+              >
+                <CardContent className="flex items-center gap-4 p-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
                     {n.type === "banner" ? (
-                      <Bell className="w-5 h-5 text-gold" />
+                      <Bell className="h-4 w-4 text-accent" />
                     ) : (
-                      <BellRing className="w-5 h-5 text-gold-light/60" />
+                      <BellRing className="h-4 w-4 text-muted-foreground" />
                     )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-gold-light text-sm font-medium">{n.title}</p>
-                      <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                        n.type === "banner"
-                          ? "bg-gold/20 text-gold"
-                          : "bg-gold-light/10 text-gold-light/60"
-                      }`}>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm font-medium text-foreground">{n.title}</p>
+                      <span
+                        className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${
+                          n.type === "banner"
+                            ? "bg-accent/15 text-accent"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
                         {n.type}
                       </span>
                     </div>
-                    <p className="text-gold-light/50 text-xs">{n.message}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{n.message}</p>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+
+                  <div className="flex shrink-0 items-center gap-1">
                     <button
                       onClick={() => toggleNotification(n.id)}
-                      className="text-gold-light/60 hover:text-gold transition-colors"
+                      className="rounded-md p-1.5 transition-colors hover:bg-muted"
                       title={n.active ? "Deactivate" : "Activate"}
                     >
                       {n.active ? (
-                        <ToggleRight className="w-6 h-6 text-green-400" />
+                        <ToggleRight className="h-5 w-5 text-green-500" />
                       ) : (
-                        <ToggleLeft className="w-6 h-6" />
+                        <ToggleLeft className="h-5 w-5 text-muted-foreground" />
                       )}
                     </button>
                     <button
@@ -124,9 +145,9 @@ const NotificationManager = () => {
                         removeNotification(n.id);
                         toast.success("Notification deleted");
                       }}
-                      className="text-destructive hover:text-destructive/80 p-1"
+                      className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </CardContent>
