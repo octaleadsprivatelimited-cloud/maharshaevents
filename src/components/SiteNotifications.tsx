@@ -69,7 +69,7 @@ const SiteNotifications = () => {
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 40, opacity: 0, scale: 0.97 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-sm sm:max-w-md overflow-hidden rounded-t-2xl sm:rounded-2xl bg-card shadow-2xl"
+            className="relative w-full max-w-sm sm:max-w-md overflow-hidden rounded-t-2xl sm:rounded-2xl bg-card shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -85,7 +85,7 @@ const SiteNotifications = () => {
               <img
                 src={showBanner.imageUrl}
                 alt={showBanner.title || "Promotion"}
-                className="w-full aspect-[16/9] object-cover"
+                className="w-full h-auto object-contain"
               />
             )}
 
