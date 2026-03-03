@@ -61,39 +61,54 @@ const SiteNotifications = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-dark/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-6"
           onClick={closeBanner}
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-navy border border-gold/30 rounded-lg max-w-md w-full p-6 relative shadow-2xl"
+            initial={{ y: 40, opacity: 0, scale: 0.97 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 40, opacity: 0, scale: 0.97 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-sm sm:max-w-md overflow-hidden rounded-t-2xl sm:rounded-2xl bg-card shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close button */}
             <button
               onClick={closeBanner}
-              className="absolute top-3 right-3 text-gold-light/50 hover:text-gold-light"
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/60 hover:text-white"
             >
-              <X className="w-5 h-5" />
+              <X className="h-4 w-4" />
             </button>
-            <div className="text-center">
-              {showBanner.imageUrl ? (
-                <img
-                  src={showBanner.imageUrl}
-                  alt={showBanner.title}
-                  className="w-full max-h-48 object-cover rounded-md mb-4"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-gold text-xl">✨</span>
+
+            {/* Image - edge to edge, no border */}
+            {showBanner.imageUrl && (
+              <img
+                src={showBanner.imageUrl}
+                alt={showBanner.title || "Promotion"}
+                className="w-full aspect-[16/9] object-cover"
+              />
+            )}
+
+            {/* Content */}
+            <div className="px-5 py-5 sm:px-6 sm:py-6 text-center">
+              {!showBanner.imageUrl && (
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/15">
+                  <span className="text-xl">✨</span>
                 </div>
               )}
-              <h3 className="font-display text-xl text-gold-light mb-2">{showBanner.title}</h3>
-              <p className="text-gold-light/60 text-sm">{showBanner.message}</p>
+              {showBanner.title && (
+                <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground mb-1.5">
+                  {showBanner.title}
+                </h3>
+              )}
+              {showBanner.message && (
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {showBanner.message}
+                </p>
+              )}
               <button
                 onClick={closeBanner}
-                className="mt-5 px-6 py-2 bg-gradient-gold text-navy-dark font-semibold rounded-md text-sm hover:opacity-90 transition-opacity"
+                className="mt-5 w-full sm:w-auto px-8 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg text-sm transition-all hover:opacity-90 active:scale-[0.98]"
               >
                 Got it!
               </button>
