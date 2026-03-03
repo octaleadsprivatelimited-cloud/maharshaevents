@@ -42,8 +42,10 @@ const Booking = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <section className="relative pt-32 pb-20 bg-gradient-navy">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative pt-32 pb-20">
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/birthday.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/85 via-navy-dark/75 to-navy-dark/90" />
+        <div className="relative z-10 container mx-auto px-4 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

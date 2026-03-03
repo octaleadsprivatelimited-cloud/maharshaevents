@@ -35,7 +35,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
+          className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 md:mb-6 leading-tight"
         >
           <span className="text-gold-light/90">Crafting</span>
           <br />
@@ -48,7 +48,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-gold-light/60 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-sans"
+          className="text-gold-light/60 text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-10 px-2 font-sans"
         >
           From dream weddings to grand corporate galas, we transform your vision
           into breathtaking reality with meticulous attention to detail.
@@ -78,7 +78,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto"
+          className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
         >
           {[
             { value: "500+", label: "Events Completed" },
