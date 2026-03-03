@@ -1,31 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Image,
-  Video,
-  Bell,
   LayoutDashboard,
   ArrowLeft,
   ImagePlus,
   Youtube,
   BellRing,
+  KeyRound,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ImageManager from "@/components/admin/ImageManager";
 import VideoManager from "@/components/admin/VideoManager";
 import NotificationManager from "@/components/admin/NotificationManager";
+import ChangePassword from "@/components/admin/ChangePassword";
+import AdminLogin from "@/components/admin/AdminLogin";
 import { cn } from "@/lib/utils";
+import { auth, ADMIN_EMAILS } from "@/lib/firebase";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { toast } from "sonner";
 
 const NAV_ITEMS = [
   { id: "images", label: "Gallery Images", icon: ImagePlus, description: "Upload & manage gallery" },
   { id: "videos", label: "YouTube Videos", icon: Youtube, description: "Embed video content" },
   { id: "notifications", label: "Notifications", icon: BellRing, description: "Site announcements" },
+  { id: "password", label: "Change Password", icon: KeyRound, description: "Update your credentials" },
 ] as const;
 
 type TabId = (typeof NAV_ITEMS)[number]["id"];
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<TabId>("images");
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        const email = firebaseUser.email?.toLowerCase() || "";
+        if (ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(email)) {
+          setUser(firebaseUser);
+        } else {
+          signOut(auth);
+          toast.error("You are not authorized to access this panel");
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+      setAuthLoading(false);
+    });
+    return () => unsub();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    toast.success("Logged out");
+  };
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AdminLogin />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,11 +83,19 @@ const Admin = () => {
               <h1 className="font-display text-lg font-semibold text-foreground">Admin Panel</h1>
             </div>
           </div>
-          <Link to="/">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to Site
+          <div className="flex items-center gap-2">
+            <span className="hidden text-sm text-muted-foreground md:inline">
+              {user.email}
+            </span>
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5">
+              <LogOut className="h-3.5 w-3.5" /> Logout
             </Button>
-          </Link>
+            <Link to="/">
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <ArrowLeft className="h-3.5 w-3.5" /> Back to Site
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -76,19 +127,6 @@ const Admin = () => {
               ))}
             </nav>
           </div>
-
-          <div className="absolute bottom-0 left-0 right-0 border-t border-border p-4">
-            <div className="rounded-lg bg-muted p-3">
-              <p className="text-xs font-medium text-foreground">Firebase Status</p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
-                Using localStorage fallback. Connect Firebase to sync data.
-              </p>
-              <div className="mt-2 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                <span className="text-[11px] text-amber-600">Not connected</span>
-              </div>
-            </div>
-          </div>
         </aside>
 
         {/* Mobile Tab Bar */}
@@ -115,7 +153,6 @@ const Admin = () => {
         {/* Main Content */}
         <main className="flex-1 pb-20 md:pb-0">
           <div className="mx-auto max-w-4xl p-4 md:p-8">
-            {/* Page Header */}
             <div className="mb-6">
               <h2 className="font-display text-2xl font-semibold text-foreground">
                 {NAV_ITEMS.find((i) => i.id === activeTab)?.label}
@@ -125,10 +162,10 @@ const Admin = () => {
               </p>
             </div>
 
-            {/* Content */}
             {activeTab === "images" && <ImageManager />}
             {activeTab === "videos" && <VideoManager />}
             {activeTab === "notifications" && <NotificationManager />}
+            {activeTab === "password" && <ChangePassword />}
           </div>
         </main>
       </div>
