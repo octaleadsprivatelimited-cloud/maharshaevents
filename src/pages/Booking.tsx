@@ -8,12 +8,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Send, CheckCircle } from "lucide-react";
+import { saveEnquiry } from "@/lib/useFirebaseData";
 
 const Booking = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [budget, setBudget] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    saveEnquiry({
+      source: "booking",
+      name,
+      email,
+      phone,
+      eventType,
+      eventDate,
+      budget,
+      message,
+    });
     setSubmitted(true);
     toast.success("Thank you! We'll get back to you within 24 hours.");
   };
@@ -76,22 +94,22 @@ const Booking = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Full Name *</label>
-                <Input required placeholder="Your full name" className="bg-background" />
+                <Input required placeholder="Your full name" className="bg-background" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
-                <Input required type="email" placeholder="your@email.com" className="bg-background" />
+                <Input required type="email" placeholder="your@email.com" className="bg-background" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Phone *</label>
-                <Input required type="tel" placeholder="+91 98765 43210" className="bg-background" />
+                <Input required type="tel" placeholder="+91 98765 43210" className="bg-background" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Event Type *</label>
-                <Select required>
+                <Select required value={eventType} onValueChange={setEventType}>
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select event type" />
                   </SelectTrigger>
@@ -109,19 +127,19 @@ const Booking = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Event Date *</label>
-                <Input required type="date" className="bg-background" />
+                <Input required type="date" className="bg-background" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Budget Range</label>
-                <Select>
+                <Select value={budget} onValueChange={setBudget}>
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select budget" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="50k-1l">₹50,000 - ₹1,00,000</SelectItem>
-                    <SelectItem value="1l-5l">₹1,00,000 - ₹5,00,000</SelectItem>
-                    <SelectItem value="5l-10l">₹5,00,000 - ₹10,00,000</SelectItem>
-                    <SelectItem value="10l+">₹10,00,000+</SelectItem>
+                    <SelectItem value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</SelectItem>
+                    <SelectItem value="₹1,00,000 - ₹5,00,000">₹1,00,000 - ₹5,00,000</SelectItem>
+                    <SelectItem value="₹5,00,000 - ₹10,00,000">₹5,00,000 - ₹10,00,000</SelectItem>
+                    <SelectItem value="₹10,00,000+">₹10,00,000+</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -129,7 +147,7 @@ const Booking = () => {
 
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">Message</label>
-              <Textarea placeholder="Tell us about your vision..." rows={4} className="bg-background" />
+              <Textarea placeholder="Tell us about your vision..." rows={4} className="bg-background" value={message} onChange={(e) => setMessage(e.target.value)} />
             </div>
 
             <Button type="submit" variant="hero" size="lg" className="w-full py-6">

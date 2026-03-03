@@ -8,11 +8,13 @@ import {
   BellRing,
   KeyRound,
   LogOut,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ImageManager from "@/components/admin/ImageManager";
 import VideoManager from "@/components/admin/VideoManager";
 import NotificationManager from "@/components/admin/NotificationManager";
+import EnquiryManager from "@/components/admin/EnquiryManager";
 import ChangePassword from "@/components/admin/ChangePassword";
 import AdminLogin from "@/components/admin/AdminLogin";
 import { cn } from "@/lib/utils";
@@ -21,6 +23,7 @@ import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { toast } from "sonner";
 
 const NAV_ITEMS = [
+  { id: "enquiries", label: "Enquiries", icon: Users, description: "Customer submissions & follow-ups" },
   { id: "images", label: "Gallery Images", icon: ImagePlus, description: "Upload & manage gallery" },
   { id: "videos", label: "YouTube Videos", icon: Youtube, description: "Embed video content" },
   { id: "notifications", label: "Notifications", icon: BellRing, description: "Site announcements" },
@@ -30,7 +33,7 @@ const NAV_ITEMS = [
 type TabId = (typeof NAV_ITEMS)[number]["id"];
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState<TabId>("images");
+  const [activeTab, setActiveTab] = useState<TabId>("enquiries");
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -162,6 +165,7 @@ const Admin = () => {
               </p>
             </div>
 
+            {activeTab === "enquiries" && <EnquiryManager />}
             {activeTab === "images" && <ImageManager />}
             {activeTab === "videos" && <VideoManager />}
             {activeTab === "notifications" && <NotificationManager />}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
@@ -6,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { toast } from "sonner";
+import { saveEnquiry } from "@/lib/useFirebaseData";
 
 const contactInfo = [
   { icon: Phone, label: "Phone", value: "+91 7893330301", href: "tel:+917893330301" },
@@ -15,9 +17,25 @@ const contactInfo = [
 ];
 
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    saveEnquiry({
+      source: "contact",
+      name,
+      email,
+      subject,
+      message,
+    });
     toast.success("Message sent! We'll respond within 24 hours.");
+    setName("");
+    setEmail("");
+    setSubject("");
+    setMessage("");
   };
 
   return (
@@ -41,7 +59,6 @@ const Contact = () => {
       <section className="section-padding bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16">
-            {/* Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -55,14 +72,9 @@ const Contact = () => {
                 Whether you have a question about our services, pricing, or just want to say hello,
                 our team is ready to answer all your questions.
               </p>
-
               <div className="space-y-6">
                 {contactInfo.map((c) => (
-                  <a
-                    key={c.label}
-                    href={c.href}
-                    className="flex items-center gap-4 group"
-                  >
+                  <a key={c.label} href={c.href} className="flex items-center gap-4 group">
                     <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                       <c.icon className="w-5 h-5 text-gold" />
                     </div>
@@ -75,7 +87,6 @@ const Contact = () => {
               </div>
             </motion.div>
 
-            {/* Form */}
             <motion.form
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -86,20 +97,20 @@ const Contact = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="text-sm font-medium text-foreground mb-2 block">Name *</label>
-                  <Input required placeholder="Your name" className="bg-background" />
+                  <Input required placeholder="Your name" className="bg-background" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
-                  <Input required type="email" placeholder="your@email.com" className="bg-background" />
+                  <Input required type="email" placeholder="your@email.com" className="bg-background" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Subject</label>
-                <Input placeholder="How can we help?" className="bg-background" />
+                <Input placeholder="How can we help?" className="bg-background" value={subject} onChange={(e) => setSubject(e.target.value)} />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">Message *</label>
-                <Textarea required placeholder="Tell us more..." rows={5} className="bg-background" />
+                <Textarea required placeholder="Tell us more..." rows={5} className="bg-background" value={message} onChange={(e) => setMessage(e.target.value)} />
               </div>
               <Button type="submit" variant="hero" size="lg" className="w-full py-6">
                 Send Message
@@ -110,7 +121,6 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Map */}
       <section className="h-80 bg-muted flex items-center justify-center">
         <div className="text-center text-muted-foreground">
           <MapPin className="w-10 h-10 mx-auto mb-3 text-gold" />
