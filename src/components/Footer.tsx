@@ -88,7 +88,10 @@ const Footer = () => {
 
         <div className="border-t border-gold/10 mt-12 pt-8 text-center">
           <p className="text-gold-light/30 text-sm">
-            © {new Date().getFullYear()} Maharsha Events. All rights reserved.
+            © {new Date().getFullYear()} Maharsha Events. All rights reserved. Developed by{" "}
+            <a href="https://octaleads.com" target="_blank" rel="noopener noreferrer" className="text-gold/50 hover:text-gold transition-colors">
+              Octaleads Pvt. Ltd.
+            </a>
           </p>
         </div>
       </div>
