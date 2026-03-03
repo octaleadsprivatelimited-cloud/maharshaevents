@@ -78,9 +78,17 @@ const SiteNotifications = () => {
               <X className="w-5 h-5" />
             </button>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-gold text-xl">✨</span>
-              </div>
+              {showBanner.imageUrl ? (
+                <img
+                  src={showBanner.imageUrl}
+                  alt={showBanner.title}
+                  className="w-full max-h-48 object-cover rounded-md mb-4"
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-gold text-xl">✨</span>
+                </div>
+              )}
               <h3 className="font-display text-xl text-gold-light mb-2">{showBanner.title}</h3>
               <p className="text-gold-light/60 text-sm">{showBanner.message}</p>
               <button
