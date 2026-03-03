@@ -32,8 +32,9 @@ const NotificationManager = () => {
   };
 
   const handleAdd = () => {
-    if (!title.trim() || !message.trim()) {
-      toast.error("Please fill in both title and message");
+    const filled = [title.trim(), message.trim(), imageUrl.trim()].filter(Boolean).length + 1; // +1 for type which is always selected
+    if (filled < 2) {
+      toast.error("Please fill at least 2 fields (title, message, type, or image)");
       return;
     }
     addNotification({ title: title.trim(), message: message.trim(), type, active: true, ...(imageUrl.trim() ? { imageUrl: imageUrl.trim() } : {}) });
