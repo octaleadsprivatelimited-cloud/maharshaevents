@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronDown } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown } from "lucide-react";
 
 const FooterDropdown = ({ title, children }: { title: string; children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -36,16 +36,24 @@ const Footer = () => {
               Creating unforgettable moments with elegance, precision, and passion since 2012.
             </p>
             <div className="flex gap-4 mt-6">
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-gold-light/50 hover:text-gold hover:border-gold/50 transition-colors"
-                  aria-label="Social media"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
+              <a
+                href="https://www.instagram.com/maharshaevents?igsh=MXRtaWhlaml1NHh6eg%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-gold-light/50 hover:text-gold hover:border-gold/50 transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.facebook.com/story.php?story_fbid=691540436542527&id=100070597309847&mibextid=wwXIfr&rdid=RAP1DhzZTAemEq1q#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-gold-light/50 hover:text-gold hover:border-gold/50 transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
