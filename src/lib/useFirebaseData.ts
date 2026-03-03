@@ -23,6 +23,7 @@ export interface SiteNotification {
   message: string;
   type: "banner" | "toast";
   active: boolean;
+  imageUrl?: string;
   createdAt: number;
 }
 

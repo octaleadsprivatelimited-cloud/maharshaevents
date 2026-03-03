@@ -12,15 +12,17 @@ const NotificationManager = () => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [type, setType] = useState<"banner" | "toast">("banner");
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleAdd = () => {
     if (!title.trim() || !message.trim()) {
       toast.error("Please fill in both title and message");
       return;
     }
-    addNotification({ title: title.trim(), message: message.trim(), type, active: true });
+    addNotification({ title: title.trim(), message: message.trim(), type, active: true, ...(imageUrl.trim() ? { imageUrl: imageUrl.trim() } : {}) });
     setTitle("");
     setMessage("");
+    setImageUrl("");
     toast.success("Notification created");
   };
 
@@ -66,6 +68,28 @@ const NotificationManager = () => {
                 className="min-h-[80px]"
               />
             </div>
+            {type === "banner" && (
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                  Promotional Image URL <span className="text-muted-foreground/50">(optional)</span>
+                </label>
+                <Input
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/promo-image.jpg"
+                />
+                {imageUrl.trim() && (
+                  <div className="mt-2 overflow-hidden rounded-md border border-border">
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="h-32 w-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <Button onClick={handleAdd} className="mt-4 gap-1.5">
@@ -126,6 +150,9 @@ const NotificationManager = () => {
                       </span>
                     </div>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">{n.message}</p>
+                    {n.imageUrl && (
+                      <span className="mt-0.5 text-[10px] text-accent">📷 Has image</span>
+                    )}
                   </div>
 
                   <div className="flex shrink-0 items-center gap-1">
