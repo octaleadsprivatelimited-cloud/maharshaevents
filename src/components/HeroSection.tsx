@@ -17,25 +17,25 @@ const HeroSection = () => {
       <div className="absolute top-20 left-10 w-72 h-72 bg-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
 
-      <div className="relative z-10 container mx-auto px-4 text-center">
+      <div className="relative z-10 container mx-auto px-4 text-center max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex items-center justify-center gap-2 mb-6"
+          className="flex items-center justify-center gap-2 mb-4"
         >
-          <Sparkles className="w-5 h-5 text-gold" />
-          <span className="text-gold text-sm font-medium tracking-[0.3em] uppercase">
+          <Sparkles className="w-4 h-4 text-gold" />
+          <span className="text-gold text-xs font-medium tracking-[0.2em] uppercase sm:text-sm">
             Premium Event Planning
           </span>
-          <Sparkles className="w-5 h-5 text-gold" />
+          <Sparkles className="w-4 h-4 text-gold" />
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 md:mb-6 leading-tight"
+          className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 leading-tight"
         >
           <span className="text-gold-light/90">Crafting</span>
           <br />
@@ -48,7 +48,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-gold-light/60 text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-10 px-2 font-sans"
+          className="text-gold-light/60 text-sm md:text-base max-w-xl mx-auto mb-6 md:mb-8 px-2 font-sans"
         >
           From dream weddings to grand corporate galas, we transform your vision
           into breathtaking reality with meticulous attention to detail.
@@ -58,27 +58,27 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-3 justify-center"
         >
           <Link to="/booking">
-            <Button variant="hero" size="lg" className="text-base px-8 py-6">
+            <Button variant="hero" size="lg" className="text-sm px-6 py-4">
               Book Your Event
-              <ArrowRight className="w-5 h-5 ml-1" />
+              <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
           <Link to="/portfolio">
-            <Button variant="hero-outline" size="lg" className="text-base px-8 py-6">
+            <Button variant="hero-outline" size="lg" className="text-sm px-6 py-4">
               View Our Work
             </Button>
           </Link>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats - single row on all screen sizes */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
+          className="mt-8 md:mt-12 grid grid-cols-4 gap-1 sm:gap-3 md:gap-6 max-w-2xl mx-auto"
         >
           {[
             { value: "500+", label: "Events Completed" },
@@ -86,11 +86,13 @@ const HeroSection = () => {
             { value: "50+", label: "Team Members" },
             { value: "100%", label: "Client Satisfaction" },
           ].map((stat) => (
-            <div key={stat.label}>
-              <div className="text-3xl md:text-4xl font-display font-bold text-gold">
+            <div key={stat.label} className="text-center min-w-0">
+              <div className="text-base sm:text-xl md:text-2xl font-display font-bold text-gold">
                 {stat.value}
               </div>
-              <div className="text-gold-light/50 text-sm mt-1">{stat.label}</div>
+              <div className="text-gold-light/50 text-[10px] sm:text-xs mt-0.5 leading-tight">
+                {stat.label}
+              </div>
             </div>
           ))}
         </motion.div>

@@ -5,14 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useVideos } from "@/lib/useFirebaseData";
+import { extractYouTubeId } from "@/lib/youtube";
 import { toast } from "sonner";
-
-function extractYouTubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
-  );
-  return match ? match[1] : null;
-}
 
 const VideoManager = () => {
   const { videos, addVideo, removeVideo } = useVideos();
