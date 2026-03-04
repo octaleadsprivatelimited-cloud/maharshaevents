@@ -32,7 +32,7 @@ const Footer = () => {
             <span className="font-display text-2xl font-bold text-gradient-gold">
               Maharsha Events
             </span>
-            <p className="text-gold-light/50 text-sm mt-4 leading-relaxed">
+            <p className="text-gold-light/80 text-sm mt-4 leading-relaxed">
               Creating unforgettable moments with elegance, precision, and passion since 2012.
             </p>
             <div className="flex gap-4 mt-6">
@@ -40,7 +40,7 @@ const Footer = () => {
                 href="https://www.instagram.com/maharshaevents?igsh=MXRtaWhlaml1NHh6eg%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-gold-light/50 hover:text-gold hover:border-gold/50 transition-colors"
+                className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-gold-light/80 hover:text-gold hover:border-gold/50 transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="w-4 h-4" />
@@ -49,7 +49,7 @@ const Footer = () => {
                 href="https://www.facebook.com/story.php?story_fbid=691540436542527&id=100070597309847&mibextid=wwXIfr&rdid=RAP1DhzZTAemEq1q#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-gold-light/50 hover:text-gold hover:border-gold/50 transition-colors"
+                className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-gold-light/80 hover:text-gold hover:border-gold/50 transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="w-4 h-4" />
@@ -63,7 +63,7 @@ const Footer = () => {
               <Link
                 key={link}
                 to={`/${link.toLowerCase()}`}
-                className="text-gold-light/50 text-sm hover:text-gold transition-colors"
+                className="text-gold-light/80 text-sm hover:text-gold transition-colors"
               >
                 {link}
               </Link>
@@ -73,21 +73,21 @@ const Footer = () => {
           {/* Services */}
           <FooterDropdown title="Services">
             {["Wedding Planning", "Corporate Events", "Birthday Parties", "Decoration", "Venue Booking"].map((s) => (
-              <span key={s} className="text-gold-light/50 text-sm">{s}</span>
+              <span key={s} className="text-gold-light/80 text-sm">{s}</span>
             ))}
           </FooterDropdown>
 
           {/* Contact */}
           <FooterDropdown title="Contact">
-            <a href="tel:+917893330301" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
+            <a href="tel:+917893330301" className="flex items-center gap-3 text-gold-light/80 text-sm hover:text-gold transition-colors">
               <Phone className="w-4 h-4 shrink-0" />
               +91 7893330301
             </a>
-            <a href="mailto:info@maharshaevents.com" className="flex items-center gap-3 text-gold-light/50 text-sm hover:text-gold transition-colors">
+            <a href="mailto:info@maharshaevents.com" className="flex items-center gap-3 text-gold-light/80 text-sm hover:text-gold transition-colors">
               <Mail className="w-4 h-4 shrink-0" />
               info@maharshaevents.com
             </a>
-            <div className="flex items-start gap-3 text-gold-light/50 text-sm">
+            <div className="flex items-start gap-3 text-gold-light/80 text-sm">
               <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
               Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir, Telangana 500091
             </div>
@@ -95,9 +95,9 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gold/10 mt-12 pt-8 text-center">
-          <p className="text-gold-light/30 text-sm">
+          <p className="text-gold-light/70 text-sm">
             © {new Date().getFullYear()} Maharsha Events. All rights reserved. Developed by{" "}
-            <a href="https://octaleads.com" target="_blank" rel="noopener noreferrer" className="text-gold/50 hover:text-gold transition-colors">
+            <a href="https://octaleads.com" target="_blank" rel="noopener noreferrer" className="text-gold/80 hover:text-gold transition-colors">
               Octaleads Pvt. Ltd.
             </a>
           </p>
