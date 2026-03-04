@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import logoImg from "@/assets/logo.png";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -35,11 +36,12 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="font-display text-2xl font-bold text-gradient-gold">
-            Maharsha
-          </span>
-          <span className="font-display text-lg text-gold-light/70">Events</span>
+        <Link to="/" className="flex items-center justify-center shrink-0 rounded-md bg-white/95 px-1.5 py-0.5 shadow-sm border border-gold/20 h-8 sm:h-9 overflow-visible">
+          <img
+            src={logoImg}
+            alt="Maharsha Events"
+            className="w-auto object-contain h-12 sm:h-14 -my-1 sm:-my-1.5"
+          />
         </Link>
 
         {/* Desktop Nav */}
