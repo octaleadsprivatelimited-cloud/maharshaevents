@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { db } from "@/lib/firebase";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import type { SiteNotification } from "@/lib/useFirebaseData";
 
-const STORAGE_KEY = "maharsha_notifications";
 const DISMISSED_KEY = "maharsha_dismissed_notifications";
 
-function getActiveNotifications(): SiteNotification[] {
+function getDismissed(): string[] {
   try {
-    const all: SiteNotification[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    const dismissed: string[] = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
-    return all.filter((n) => n.active && !dismissed.includes(n.id));
+    return JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
   } catch {
     return [];
   }
@@ -19,32 +18,37 @@ function getActiveNotifications(): SiteNotification[] {
 
 function dismiss(id: string) {
   try {
-    const dismissed: string[] = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
+    const dismissed = getDismissed();
     localStorage.setItem(DISMISSED_KEY, JSON.stringify([...dismissed, id]));
   } catch {}
 }
 
 const SiteNotifications = () => {
-  const [banners, setBanners] = useState<SiteNotification[]>([]);
   const [showBanner, setShowBanner] = useState<SiteNotification | null>(null);
 
   useEffect(() => {
-    const active = getActiveNotifications();
+    const q = query(collection(db, "notifications"), where("active", "==", true));
+    const unsub = onSnapshot(q, (snap) => {
+      const dismissed = getDismissed();
+      const active = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() } as SiteNotification))
+        .filter((n) => !dismissed.includes(n.id));
 
-    // Show toasts
-    active
-      .filter((n) => n.type === "toast")
-      .forEach((n) => {
-        toast(n.title, { description: n.message, duration: 6000 });
-        dismiss(n.id);
-      });
+      // Show toasts
+      active
+        .filter((n) => n.type === "toast")
+        .forEach((n) => {
+          toast(n.title, { description: n.message, duration: 6000 });
+          dismiss(n.id);
+        });
 
-    // Show first active banner
-    const bannerNotifs = active.filter((n) => n.type === "banner");
-    setBanners(bannerNotifs);
-    if (bannerNotifs.length > 0) {
-      setShowBanner(bannerNotifs[0]);
-    }
+      // Show first active banner
+      const bannerNotifs = active.filter((n) => n.type === "banner");
+      if (bannerNotifs.length > 0 && !showBanner) {
+        setShowBanner(bannerNotifs[0]);
+      }
+    });
+    return unsub;
   }, []);
 
   const closeBanner = () => {
