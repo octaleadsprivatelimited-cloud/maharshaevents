@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
@@ -22,7 +24,44 @@ const testimonials = [
   },
 ];
 
+const TestimonialCard = ({
+  name,
+  role,
+  text,
+  rating,
+}: (typeof testimonials)[0]) => (
+  <div className="bg-card rounded-xl p-8 hover-lift border border-border relative md:min-w-0 flex-shrink-0 w-[85%] min-w-[85%] sm:w-[75%] sm:min-w-[75%] md:w-auto md:min-w-0">
+    <Quote className="w-10 h-10 text-gold/20 absolute top-6 right-6" />
+    <div className="flex gap-1 mb-4">
+      {Array.from({ length: rating }).map((_, j) => (
+        <Star key={j} className="w-4 h-4 fill-gold text-gold" />
+      ))}
+    </div>
+    <p className="text-muted-foreground leading-relaxed mb-6">"{text}"</p>
+    <div>
+      <div className="font-semibold text-foreground">{name}</div>
+      <div className="text-sm text-muted-foreground">{role}</div>
+    </div>
+  </div>
+);
+
+const AUTOPLAY_INTERVAL = 4000;
+
 const TestimonialsSection = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    loop: true,
+    skipSnaps: false,
+  });
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, AUTOPLAY_INTERVAL);
+    return () => clearInterval(interval);
+  }, [emblaApi]);
+
   return (
     <section className="section-padding bg-background">
       <div className="container mx-auto">
@@ -40,7 +79,19 @@ const TestimonialsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Mobile: carousel with auto-scroll */}
+        <div className="md:hidden relative px-2">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex touch-pan-x gap-4">
+              {testimonials.map((t) => (
+                <TestimonialCard key={t.name} {...t} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop: grid */}
+        <div className="hidden md:grid md:grid-cols-3 gap-8">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -48,21 +99,8 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-card rounded-xl p-8 hover-lift border border-border relative"
             >
-              <Quote className="w-10 h-10 text-gold/20 absolute top-6 right-6" />
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: t.rating }).map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-gold text-gold" />
-                ))}
-              </div>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                "{t.text}"
-              </p>
-              <div>
-                <div className="font-semibold text-foreground">{t.name}</div>
-                <div className="text-sm text-muted-foreground">{t.role}</div>
-              </div>
+              <TestimonialCard {...t} />
             </motion.div>
           ))}
         </div>

@@ -63,7 +63,7 @@ const ServicesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
@@ -74,7 +74,7 @@ const ServicesSection = () => {
             >
               <Link
                 to="/services"
-                className="group block relative overflow-hidden rounded-xl hover-lift h-80"
+                className="group block relative overflow-hidden rounded-xl hover-lift h-44 sm:h-56 md:h-80"
               >
                 <img
                   src={service.image}
@@ -83,12 +83,12 @@ const ServicesSection = () => {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/95 via-navy-dark/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <service.icon className="w-8 h-8 text-gold mb-3" />
-                  <h3 className="font-display text-xl font-semibold text-gold-light mb-2">
+                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-6">
+                  <service.icon className="w-6 h-6 md:w-8 md:h-8 text-gold mb-1 md:mb-3" />
+                  <h3 className="font-display text-sm md:text-xl font-semibold text-gold-light mb-0.5 md:mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-gold-light/60 text-sm leading-relaxed">
+                  <p className="text-gold-light/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-none">
                     {service.description}
                   </p>
                 </div>

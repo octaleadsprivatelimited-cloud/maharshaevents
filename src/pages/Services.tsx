@@ -77,31 +77,31 @@ const Services = () => {
       </section>
 
       <section className="section-padding bg-background">
-        <div className="container mx-auto space-y-24">
+        <div className="container mx-auto grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-24">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`grid md:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? "md:direction-rtl" : ""}`}
+              className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center ${i % 2 === 1 ? "md:direction-rtl" : ""}`}
             >
               <div className={i % 2 === 1 ? "md:order-2" : ""}>
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="rounded-xl shadow-lg w-full h-80 object-cover"
+                  className="rounded-xl shadow-lg w-full h-44 md:h-80 object-cover"
                   loading="lazy"
                 />
               </div>
               <div className={i % 2 === 1 ? "md:order-1" : ""}>
-                <service.icon className="w-10 h-10 text-gold mb-4" />
-                <h2 className="font-display text-3xl font-bold text-foreground mb-4">{service.title}</h2>
-                <p className="text-muted-foreground leading-relaxed mb-6">{service.description}</p>
-                <div className="grid grid-cols-2 gap-3">
+                <service.icon className="w-8 h-8 md:w-10 md:h-10 text-gold mb-2 md:mb-4" />
+                <h2 className="font-display text-lg md:text-3xl font-bold text-foreground mb-2 md:mb-4">{service.title}</h2>
+                <p className="text-muted-foreground text-xs md:text-base leading-relaxed mb-3 md:mb-6">{service.description}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
                   {service.benefits.map((b) => (
-                    <div key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <CheckCircle className="w-4 h-4 text-gold shrink-0" />
+                    <div key={b} className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground">
+                      <CheckCircle className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold shrink-0" />
                       {b}
                     </div>
                   ))}

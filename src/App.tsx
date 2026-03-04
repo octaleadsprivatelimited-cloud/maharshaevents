@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import WhatsAppButton from "./components/WhatsAppButton";
 import SiteNotifications from "./components/SiteNotifications";
+import BookingFormPopup from "./components/BookingFormPopup";
 import { seedDemoImages } from "./lib/seedDemoData";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -34,6 +35,7 @@ const App = () => {
         <ScrollToTop />
         <WhatsAppButton />
         <SiteNotifications />
+        <BookingFormPopup />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />

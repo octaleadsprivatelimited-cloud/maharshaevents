@@ -34,7 +34,7 @@ const Testimonials = () => {
 
       <section className="section-padding bg-background">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -42,18 +42,18 @@ const Testimonials = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-card rounded-xl p-8 hover-lift border border-border relative"
+                className="bg-card rounded-xl p-4 md:p-8 hover-lift border border-border relative"
               >
-                <Quote className="w-10 h-10 text-gold/20 absolute top-6 right-6" />
-                <div className="flex gap-1 mb-4">
+                <Quote className="w-6 h-6 md:w-10 md:h-10 text-gold/20 absolute top-3 right-3 md:top-6 md:right-6" />
+                <div className="flex gap-0.5 md:gap-1 mb-2 md:mb-4">
                   {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-gold text-gold" />
+                    <Star key={j} className="w-3 h-3 md:w-4 md:h-4 fill-gold text-gold" />
                   ))}
                 </div>
-                <p className="text-muted-foreground leading-relaxed mb-6">"{t.text}"</p>
+                <p className="text-muted-foreground text-xs md:text-base leading-relaxed mb-3 md:mb-6 line-clamp-4 md:line-clamp-none">"{t.text}"</p>
                 <div>
-                  <div className="font-semibold text-foreground">{t.name}</div>
-                  <div className="text-sm text-muted-foreground">{t.role}</div>
+                  <div className="font-semibold text-foreground text-sm md:text-base">{t.name}</div>
+                  <div className="text-xs md:text-sm text-muted-foreground">{t.role}</div>
                 </div>
               </motion.div>
             ))}

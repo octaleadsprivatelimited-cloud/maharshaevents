@@ -87,7 +87,7 @@ const About = () => {
             <span className="text-gold text-sm font-medium tracking-[0.3em] uppercase">Why Choose Us</span>
             <h2 className="font-display text-4xl font-bold text-foreground mt-3">Our Core Values</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
@@ -95,13 +95,13 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-card rounded-xl p-8 text-center hover-lift border border-border"
+                className="bg-card rounded-xl p-4 md:p-8 text-center hover-lift border border-border"
               >
-                <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-                  <v.icon className="w-7 h-7 text-gold" />
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-2 md:mb-4">
+                  <v.icon className="w-5 h-5 md:w-7 md:h-7 text-gold" />
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-2">{v.title}</h3>
-                <p className="text-muted-foreground text-sm">{v.desc}</p>
+                <h3 className="font-display text-sm md:text-lg font-semibold text-foreground mb-1 md:mb-2">{v.title}</h3>
+                <p className="text-muted-foreground text-xs md:text-sm">{v.desc}</p>
               </motion.div>
             ))}
           </div>

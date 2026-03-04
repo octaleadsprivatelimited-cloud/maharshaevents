@@ -48,7 +48,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-gold-light/60 text-sm md:text-base max-w-xl mx-auto mb-6 md:mb-8 px-2 font-sans"
+          className="text-gold-light/95 text-sm md:text-base max-w-xl mx-auto mb-6 md:mb-8 px-4 py-3 rounded-lg bg-navy-dark/50 backdrop-blur-sm font-sans"
         >
           From dream weddings to grand corporate galas, we transform your vision
           into breathtaking reality with meticulous attention to detail.
@@ -58,16 +58,16 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-3 justify-center"
+          className="flex flex-row flex-wrap gap-2 sm:gap-3 justify-center items-center"
         >
           <Link to="/booking">
-            <Button variant="hero" size="lg" className="text-sm px-6 py-4">
+            <Button variant="hero" size="lg" className="text-xs sm:text-sm px-3 py-2.5 sm:px-6 sm:py-4">
               Book Your Event
-              <ArrowRight className="w-4 h-4 ml-1" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1" />
             </Button>
           </Link>
           <Link to="/portfolio">
-            <Button variant="hero-outline" size="lg" className="text-sm px-6 py-4">
+            <Button variant="hero-outline" size="lg" className="text-xs sm:text-sm px-3 py-2.5 sm:px-6 sm:py-4">
               View Our Work
             </Button>
           </Link>
@@ -78,7 +78,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="mt-8 md:mt-12 grid grid-cols-4 gap-1 sm:gap-3 md:gap-6 max-w-2xl mx-auto"
+          className="mt-8 md:mt-12 grid grid-cols-4 gap-2 sm:gap-3 md:gap-6 max-w-2xl mx-auto"
         >
           {[
             { value: "500+", label: "Events Completed" },
@@ -87,10 +87,10 @@ const HeroSection = () => {
             { value: "100%", label: "Client Satisfaction" },
           ].map((stat) => (
             <div key={stat.label} className="text-center min-w-0">
-              <div className="text-base sm:text-xl md:text-2xl font-display font-bold text-gold">
+              <div className="text-lg sm:text-xl md:text-2xl font-display font-bold text-gold">
                 {stat.value}
               </div>
-              <div className="text-gold-light/50 text-[10px] sm:text-xs mt-0.5 leading-tight">
+              <div className="text-gold-light/90 text-xs sm:text-sm mt-1 leading-tight">
                 {stat.label}
               </div>
             </div>
