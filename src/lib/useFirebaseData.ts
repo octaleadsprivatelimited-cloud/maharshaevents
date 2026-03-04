@@ -1,4 +1,17 @@
 import { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  arrayUnion,
+  Timestamp,
+} from "firebase/firestore";
 
 // Types for admin-managed content
 export interface GalleryImage {
@@ -52,151 +65,135 @@ export interface Enquiry {
   createdAt: number;
 }
 
-// LocalStorage fallback until Firebase is configured
-const STORAGE_KEYS = {
-  images: "maharsha_gallery_images",
-  videos: "maharsha_videos",
-  notifications: "maharsha_notifications",
-  enquiries: "maharsha_enquiries",
-};
-
-function getLocal<T>(key: string): T[] {
-  try {
-    return JSON.parse(localStorage.getItem(key) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function setLocal<T>(key: string, data: T[]) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
+// ─── Gallery Images ───
 
 export function useGalleryImages() {
   const [images, setImages] = useState<GalleryImage[]>([]);
-  useEffect(() => setImages(getLocal(STORAGE_KEYS.images)), []);
 
-  const addImage = (img: Omit<GalleryImage, "id" | "createdAt">) => {
-    const newImg: GalleryImage = { ...img, id: crypto.randomUUID(), createdAt: Date.now() };
-    const updated = [newImg, ...images];
-    setImages(updated);
-    setLocal(STORAGE_KEYS.images, updated);
+  useEffect(() => {
+    const q = query(collection(db, "gallery"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snap) => {
+      setImages(snap.docs.map((d) => ({ id: d.id, ...d.data() } as GalleryImage)));
+    });
+    return unsub;
+  }, []);
+
+  const addImage = async (img: Omit<GalleryImage, "id" | "createdAt">) => {
+    await addDoc(collection(db, "gallery"), { ...img, createdAt: Date.now() });
   };
 
-  const removeImage = (id: string) => {
-    const updated = images.filter((i) => i.id !== id);
-    setImages(updated);
-    setLocal(STORAGE_KEYS.images, updated);
+  const removeImage = async (id: string) => {
+    await deleteDoc(doc(db, "gallery", id));
   };
 
   return { images, addImage, removeImage };
 }
 
+// ─── Videos ───
+
 export function useVideos() {
   const [videos, setVideos] = useState<VideoEmbed[]>([]);
-  useEffect(() => setVideos(getLocal(STORAGE_KEYS.videos)), []);
 
-  const addVideo = (v: Omit<VideoEmbed, "id" | "createdAt">) => {
-    const newV: VideoEmbed = { ...v, id: crypto.randomUUID(), createdAt: Date.now() };
-    const updated = [newV, ...videos];
-    setVideos(updated);
-    setLocal(STORAGE_KEYS.videos, updated);
+  useEffect(() => {
+    const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snap) => {
+      setVideos(snap.docs.map((d) => ({ id: d.id, ...d.data() } as VideoEmbed)));
+    });
+    return unsub;
+  }, []);
+
+  const addVideo = async (v: Omit<VideoEmbed, "id" | "createdAt">) => {
+    await addDoc(collection(db, "videos"), { ...v, createdAt: Date.now() });
   };
 
-  const removeVideo = (id: string) => {
-    const updated = videos.filter((v) => v.id !== id);
-    setVideos(updated);
-    setLocal(STORAGE_KEYS.videos, updated);
+  const removeVideo = async (id: string) => {
+    await deleteDoc(doc(db, "videos", id));
   };
 
   return { videos, addVideo, removeVideo };
 }
 
+// ─── Notifications ───
+
 export function useNotifications() {
   const [notifications, setNotifications] = useState<SiteNotification[]>([]);
-  useEffect(() => setNotifications(getLocal(STORAGE_KEYS.notifications)), []);
 
-  const addNotification = (n: Omit<SiteNotification, "id" | "createdAt">) => {
-    const newN: SiteNotification = { ...n, id: crypto.randomUUID(), createdAt: Date.now() };
-    const updated = [newN, ...notifications];
-    setNotifications(updated);
-    setLocal(STORAGE_KEYS.notifications, updated);
+  useEffect(() => {
+    const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snap) => {
+      setNotifications(snap.docs.map((d) => ({ id: d.id, ...d.data() } as SiteNotification)));
+    });
+    return unsub;
+  }, []);
+
+  const addNotification = async (n: Omit<SiteNotification, "id" | "createdAt">) => {
+    await addDoc(collection(db, "notifications"), { ...n, createdAt: Date.now() });
   };
 
-  const removeNotification = (id: string) => {
-    const updated = notifications.filter((n) => n.id !== id);
-    setNotifications(updated);
-    setLocal(STORAGE_KEYS.notifications, updated);
+  const removeNotification = async (id: string) => {
+    await deleteDoc(doc(db, "notifications", id));
   };
 
-  const toggleNotification = (id: string) => {
-    const updated = notifications.map((n) =>
-      n.id === id ? { ...n, active: !n.active } : n
-    );
-    setNotifications(updated);
-    setLocal(STORAGE_KEYS.notifications, updated);
+  const toggleNotification = async (id: string) => {
+    const notif = notifications.find((n) => n.id === id);
+    if (notif) {
+      await updateDoc(doc(db, "notifications", id), { active: !notif.active });
+    }
   };
 
   return { notifications, addNotification, removeNotification, toggleNotification };
 }
 
+// ─── Enquiries ───
+
 export function useEnquiries() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
-  useEffect(() => setEnquiries(getLocal(STORAGE_KEYS.enquiries)), []);
 
-  const addEnquiry = (e: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) => {
-    const newE: Enquiry = {
+  useEffect(() => {
+    const q = query(collection(db, "enquiries"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snap) => {
+      setEnquiries(
+        snap.docs.map((d) => {
+          const data = d.data();
+          return { id: d.id, ...data, notes: data.notes || [] } as Enquiry;
+        })
+      );
+    });
+    return unsub;
+  }, []);
+
+  const addEnquiry = async (e: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) => {
+    await addDoc(collection(db, "enquiries"), {
       ...e,
-      id: crypto.randomUUID(),
       createdAt: Date.now(),
       status: "new",
       notes: [],
-    };
-    const updated = [newE, ...enquiries];
-    setEnquiries(updated);
-    setLocal(STORAGE_KEYS.enquiries, updated);
+    });
   };
 
-  const updateStatus = (id: string, status: FollowUpStatus) => {
-    const updated = enquiries.map((e) => (e.id === id ? { ...e, status } : e));
-    setEnquiries(updated);
-    setLocal(STORAGE_KEYS.enquiries, updated);
+  const updateStatus = async (id: string, status: FollowUpStatus) => {
+    await updateDoc(doc(db, "enquiries", id), { status });
   };
 
-  const addNote = (enquiryId: string, text: string) => {
-    const updated = enquiries.map((e) =>
-      e.id === enquiryId
-        ? {
-            ...e,
-            notes: [
-              ...e.notes,
-              { id: crypto.randomUUID(), text, createdAt: Date.now() },
-            ],
-          }
-        : e
-    );
-    setEnquiries(updated);
-    setLocal(STORAGE_KEYS.enquiries, updated);
+  const addNote = async (enquiryId: string, text: string) => {
+    await updateDoc(doc(db, "enquiries", enquiryId), {
+      notes: arrayUnion({ id: crypto.randomUUID(), text, createdAt: Date.now() }),
+    });
   };
 
-  const removeEnquiry = (id: string) => {
-    const updated = enquiries.filter((e) => e.id !== id);
-    setEnquiries(updated);
-    setLocal(STORAGE_KEYS.enquiries, updated);
+  const removeEnquiry = async (id: string) => {
+    await deleteDoc(doc(db, "enquiries", id));
   };
 
   return { enquiries, addEnquiry, updateStatus, addNote, removeEnquiry };
 }
 
-// Standalone function to save enquiry from public forms (without hook)
-export function saveEnquiry(data: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) {
-  const existing = getLocal<Enquiry>(STORAGE_KEYS.enquiries);
-  const newE: Enquiry = {
+// Standalone function to save enquiry from public forms
+export async function saveEnquiry(data: Omit<Enquiry, "id" | "createdAt" | "status" | "notes">) {
+  await addDoc(collection(db, "enquiries"), {
     ...data,
-    id: crypto.randomUUID(),
     createdAt: Date.now(),
     status: "new",
     notes: [],
-  };
-  setLocal(STORAGE_KEYS.enquiries, [newE, ...existing]);
+  });
 }

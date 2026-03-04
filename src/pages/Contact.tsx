@@ -22,20 +22,24 @@ const Contact = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    saveEnquiry({
-      source: "contact",
-      name,
-      email,
-      subject,
-      message,
-    });
-    toast.success("Message sent! We'll respond within 24 hours.");
-    setName("");
-    setEmail("");
-    setSubject("");
-    setMessage("");
+    try {
+      await saveEnquiry({
+        source: "contact",
+        name,
+        email,
+        subject,
+        message,
+      });
+      toast.success("Message sent! We'll respond within 24 hours.");
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+    } catch {
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   return (
