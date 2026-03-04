@@ -34,15 +34,38 @@ type TabId = (typeof NAV_ITEMS)[number]["id"];
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<TabId>("enquiries");
-  // TODO: Re-enable auth when Firebase is connected
-  // const [user, setUser] = useState<User | null>(null);
-  // const [authLoading, setAuthLoading] = useState(true);
-  const bypassAuth = true; // Set to false once Firebase is configured
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setAuthLoading(false);
+    });
+    return unsub;
+  }, []);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    toast.success("Logged out");
+    try {
+      await signOut(auth);
+      toast.success("Logged out");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed. Please try again.");
+    }
   };
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user || !ADMIN_EMAILS.includes(user.email || "")) {
+    return <AdminLogin />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,7 +82,7 @@ const Admin = () => {
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden text-sm text-muted-foreground md:inline">
-              admin@maharshaevents.com
+              {user.email}
             </span>
             <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5">
               <LogOut className="h-3.5 w-3.5" /> Logout
