@@ -21,4 +21,4 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
 // Admin emails allowed to access the panel
-export const ADMIN_EMAILS = ["admin@maharshaevents.com"];
+export const ADMIN_EMAILS = ["admin@maharshaevents.com", "maharshaevents2018@gmail.com"];
