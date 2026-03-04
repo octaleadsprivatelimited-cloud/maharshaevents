@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ const fallbackImages = [
   { src: "/images/venue.jpg", alt: "Luxury venue", span: "" },
 ];
 
-const GalleryPreview = () => {
+const GalleryPreview = forwardRef<HTMLElement>((_, ref) => {
   const { images: firestoreImages } = useGalleryImages();
 
   const displayImages = firestoreImages.length > 0
@@ -24,7 +25,7 @@ const GalleryPreview = () => {
     : fallbackImages;
 
   return (
-    <section className="section-padding bg-gradient-navy">
+    <section ref={ref} className="section-padding bg-gradient-navy">
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -75,6 +76,8 @@ const GalleryPreview = () => {
       </div>
     </section>
   );
-};
+});
+
+GalleryPreview.displayName = "GalleryPreview";
 
 export default GalleryPreview;
