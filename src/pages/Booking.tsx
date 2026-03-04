@@ -20,20 +20,24 @@ const Booking = () => {
   const [budget, setBudget] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    saveEnquiry({
-      source: "booking",
-      name,
-      email,
-      phone,
-      eventType,
-      eventDate,
-      budget,
-      message,
-    });
-    setSubmitted(true);
-    toast.success("Thank you! We'll get back to you within 24 hours.");
+    try {
+      await saveEnquiry({
+        source: "booking",
+        name,
+        email,
+        phone,
+        eventType,
+        eventDate,
+        budget,
+        message,
+      });
+      setSubmitted(true);
+      toast.success("Thank you! We'll get back to you within 24 hours.");
+    } catch {
+      toast.error("Failed to submit enquiry. Please try again.");
+    }
   };
 
   if (submitted) {
