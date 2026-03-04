@@ -3,23 +3,36 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGalleryImages } from "@/lib/useFirebaseData";
 
-const categories = ["All", "Weddings", "Corporate", "Birthdays", "Social"];
+const categories = ["All", "Weddings", "Corporate", "Birthdays", "Social", "Wedding", "Birthday", "Decoration", "Venue", "Other"];
 
-const portfolioItems = [
+const defaultItems = [
   { src: "/images/hero-bg.jpg", alt: "Grand wedding reception", category: "Weddings" },
   { src: "/images/corporate-event.jpg", alt: "Corporate gala", category: "Corporate" },
   { src: "/images/wedding.jpg", alt: "Outdoor ceremony", category: "Weddings" },
   { src: "/images/birthday.jpg", alt: "Birthday celebration", category: "Birthdays" },
   { src: "/images/decoration.jpg", alt: "Floral setup", category: "Weddings" },
   { src: "/images/venue.jpg", alt: "Luxury venue", category: "Social" },
-  { src: "/images/hero-bg.jpg", alt: "Reception hall", category: "Corporate" },
-  { src: "/images/wedding.jpg", alt: "Garden wedding", category: "Weddings" },
 ];
 
 const Portfolio = () => {
   const [active, setActive] = useState("All");
-  const filtered = active === "All" ? portfolioItems : portfolioItems.filter((p) => p.category === active);
+  const { images: firestoreImages } = useGalleryImages();
+
+  // Merge Firestore images with defaults
+  const firestoreItems = firestoreImages.map((img) => ({
+    src: img.url,
+    alt: img.caption || "Gallery image",
+    category: img.category,
+  }));
+
+  const allItems = [...firestoreItems, ...defaultItems];
+
+  // Get unique categories that actually have items
+  const availableCategories = ["All", ...Array.from(new Set(allItems.map((item) => item.category)))];
+
+  const filtered = active === "All" ? allItems : allItems.filter((p) => p.category === active);
 
   return (
     <div className="min-h-screen">
@@ -43,7 +56,7 @@ const Portfolio = () => {
         <div className="container mx-auto">
           {/* Filters */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((cat) => (
+            {availableCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActive(cat)}
@@ -76,6 +89,9 @@ const Portfolio = () => {
                     alt={item.alt}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
                   />
                   <div className="absolute inset-0 bg-navy-dark/0 group-hover:bg-navy-dark/60 transition-all duration-300 flex items-end">
                     <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
