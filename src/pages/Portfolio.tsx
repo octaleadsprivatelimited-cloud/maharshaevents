@@ -5,33 +5,17 @@ import CTASection from "@/components/CTASection";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGalleryImages } from "@/lib/useFirebaseData";
 
-const categories = ["All", "Weddings", "Corporate", "Birthdays", "Social", "Wedding", "Birthday", "Decoration", "Venue", "Other"];
-
-const defaultItems = [
-  { src: "/images/hero-bg.jpg", alt: "Grand wedding reception", category: "Weddings" },
-  { src: "/images/corporate-event.jpg", alt: "Corporate gala", category: "Corporate" },
-  { src: "/images/wedding.jpg", alt: "Outdoor ceremony", category: "Weddings" },
-  { src: "/images/birthday.jpg", alt: "Birthday celebration", category: "Birthdays" },
-  { src: "/images/decoration.jpg", alt: "Floral setup", category: "Weddings" },
-  { src: "/images/venue.jpg", alt: "Luxury venue", category: "Social" },
-];
-
 const Portfolio = () => {
   const [active, setActive] = useState("All");
-  const { images: firestoreImages } = useGalleryImages();
+  const { images } = useGalleryImages();
 
-  // Merge Firestore images with defaults
-  const firestoreItems = firestoreImages.map((img) => ({
+  const allItems = images.map((img) => ({
     src: img.url,
     alt: img.caption || "Gallery image",
     category: img.category,
   }));
 
-  const allItems = [...firestoreItems, ...defaultItems];
-
-  // Get unique categories that actually have items
   const availableCategories = ["All", ...Array.from(new Set(allItems.map((item) => item.category)))];
-
   const filtered = active === "All" ? allItems : allItems.filter((p) => p.category === active);
 
   return (
@@ -55,54 +39,62 @@ const Portfolio = () => {
       <section className="section-padding bg-background">
         <div className="container mx-auto">
           {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {availableCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActive(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  active === cat
-                    ? "bg-gold text-accent-foreground shadow-md"
-                    : "bg-secondary text-muted-foreground hover:bg-gold/10"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          {availableCategories.length > 1 && (
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+              {availableCategories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActive(cat)}
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    active === cat
+                      ? "bg-gold text-accent-foreground shadow-md"
+                      : "bg-secondary text-muted-foreground hover:bg-gold/10"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Grid */}
-          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((item, i) => (
-                <motion.div
-                  key={`${item.alt}-${i}`}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative group overflow-hidden rounded-lg aspect-square cursor-pointer"
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder.svg";
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-navy-dark/0 group-hover:bg-navy-dark/60 transition-all duration-300 flex items-end">
-                    <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <p className="text-gold-light text-sm font-medium">{item.alt}</p>
-                      <p className="text-gold/70 text-xs">{item.category}</p>
+          {filtered.length === 0 ? (
+            <div className="text-center py-20 text-muted-foreground">
+              <p className="text-lg">No images yet. Add some from the admin panel!</p>
+            </div>
+          ) : (
+            <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <AnimatePresence mode="popLayout">
+                {filtered.map((item, i) => (
+                  <motion.div
+                    key={`${item.alt}-${i}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                    className="relative group overflow-hidden rounded-lg aspect-square cursor-pointer"
+                  >
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/placeholder.svg";
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-navy-dark/0 group-hover:bg-navy-dark/60 transition-all duration-300 flex items-end">
+                      <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="text-gold-light text-sm font-medium">{item.alt}</p>
+                        <p className="text-gold/70 text-xs">{item.category}</p>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
         </div>
       </section>
 

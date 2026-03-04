@@ -2,8 +2,9 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useGalleryImages } from "@/lib/useFirebaseData";
 
-const images = [
+const fallbackImages = [
   { src: "/images/hero-bg.jpg", alt: "Grand ballroom event", span: "md:col-span-2 md:row-span-2" },
   { src: "/images/wedding.jpg", alt: "Wedding ceremony", span: "" },
   { src: "/images/decoration.jpg", alt: "Floral decoration", span: "" },
@@ -12,6 +13,16 @@ const images = [
 ];
 
 const GalleryPreview = () => {
+  const { images: firestoreImages } = useGalleryImages();
+
+  const displayImages = firestoreImages.length > 0
+    ? firestoreImages.slice(0, 5).map((img, i) => ({
+        src: img.url,
+        alt: img.caption || "Gallery image",
+        span: i === 0 ? "md:col-span-2 md:row-span-2" : "",
+      }))
+    : fallbackImages;
+
   return (
     <section className="section-padding bg-gradient-navy">
       <div className="container mx-auto">
@@ -30,7 +41,7 @@ const GalleryPreview = () => {
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          {images.map((img, i) => (
+          {displayImages.map((img, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -44,6 +55,9 @@ const GalleryPreview = () => {
                 alt={img.alt}
                 className="w-full h-full object-cover aspect-square transition-transform duration-700 group-hover:scale-110"
                 loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/placeholder.svg";
+                }}
               />
               <div className="absolute inset-0 bg-navy-dark/0 group-hover:bg-navy-dark/40 transition-colors duration-300" />
             </motion.div>
