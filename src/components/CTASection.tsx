@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useBookingPopup } from "@/context/BookingPopupContext";
 
 const CTASection = () => {
+  const { openBookingPopup } = useBookingPopup();
   return (
     <section className="relative py-28 overflow-hidden">
       <div
@@ -28,12 +30,10 @@ const CTASection = () => {
             and personalized event proposal.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/booking">
-              <Button variant="hero" size="lg" className="text-base px-10 py-6">
-                Get a Free Quote
-                <ArrowRight className="w-5 h-5 ml-1" />
-              </Button>
-            </Link>
+            <Button variant="hero" size="lg" className="text-base px-10 py-6" onClick={openBookingPopup}>
+              Get a Free Quote
+              <ArrowRight className="w-5 h-5 ml-1" />
+            </Button>
             <Link to="/contact">
               <Button variant="hero-outline" size="lg" className="text-base px-10 py-6">
                 Contact Us

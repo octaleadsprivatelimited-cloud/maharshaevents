@@ -8,6 +8,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import WhatsAppButton from "./components/WhatsAppButton";
 import SiteNotifications from "./components/SiteNotifications";
 import BookingFormPopup from "./components/BookingFormPopup";
+import { BookingPopupProvider } from "./context/BookingPopupContext";
 import { seedDemoImages } from "./lib/seedDemoData";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -32,11 +33,12 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop />
-        <WhatsAppButton />
-        <SiteNotifications />
-        <BookingFormPopup />
-        <Routes>
+        <BookingPopupProvider>
+          <ScrollToTop />
+          <WhatsAppButton />
+          <SiteNotifications />
+          <BookingFormPopup />
+          <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -47,6 +49,7 @@ const App = () => {
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </BookingPopupProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -4,6 +4,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@/assets/logo.png";
+import { useBookingPopup } from "@/context/BookingPopupContext";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -18,6 +19,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { openBookingPopup } = useBookingPopup();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -66,9 +68,7 @@ const Navbar = () => {
             <Phone className="w-4 h-4" />
             +91 7893330301
           </a>
-          <Link to="/booking">
-            <Button variant="hero" size="sm">Book Now</Button>
-          </Link>
+          <Button variant="hero" size="sm" onClick={openBookingPopup}>Book Now</Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -102,9 +102,7 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link to="/booking">
-                <Button variant="hero" size="sm">Book Now</Button>
-              </Link>
+              <Button variant="hero" size="sm" onClick={openBookingPopup} className="w-full">Book Now</Button>
             </nav>
           </motion.div>
         )}

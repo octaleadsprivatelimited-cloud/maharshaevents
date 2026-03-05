@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useBookingPopup } from "@/context/BookingPopupContext";
 
 const HeroSection = () => {
+  const { openBookingPopup } = useBookingPopup();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -60,12 +62,10 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="flex flex-row flex-wrap gap-2 sm:gap-3 justify-center items-center"
         >
-          <Link to="/booking">
-            <Button variant="hero" size="lg" className="text-xs sm:text-sm px-3 py-2.5 sm:px-6 sm:py-4">
-              Book Your Event
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1" />
-            </Button>
-          </Link>
+          <Button variant="hero" size="lg" className="text-xs sm:text-sm px-3 py-2.5 sm:px-6 sm:py-4" onClick={openBookingPopup}>
+            Book Your Event
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1" />
+          </Button>
           <Link to="/portfolio">
             <Button variant="hero-outline" size="lg" className="text-xs sm:text-sm px-3 py-2.5 sm:px-6 sm:py-4">
               View Our Work

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +19,10 @@ import {
 import { toast } from "sonner";
 import { Send } from "lucide-react";
 import { saveEnquiry } from "@/lib/useFirebaseData";
-
-const POPUP_DELAY_MS = 1500;
+import { useBookingPopup } from "@/context/BookingPopupContext";
 
 const BookingFormPopup = () => {
-  const [open, setOpen] = useState(false);
+  const { isOpen, closeBookingPopup } = useBookingPopup();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -31,11 +30,6 @@ const BookingFormPopup = () => {
   const [eventDate, setEventDate] = useState("");
   const [budget, setBudget] = useState("");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const timer = setTimeout(() => setOpen(true), POPUP_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,14 +45,14 @@ const BookingFormPopup = () => {
         message,
       });
       toast.success("Thank you! We'll get back to you within 24 hours.");
-      setOpen(false);
+      closeBookingPopup();
     } catch {
       toast.error("Failed to submit enquiry. Please try again.");
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && closeBookingPopup()}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">Book Your Event</DialogTitle>
