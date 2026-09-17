@@ -39,12 +39,22 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4">
-        <Link to="/" className="flex items-center justify-center shrink-0 rounded-md bg-white/95 px-1.5 py-0.5 shadow-sm border border-gold/20 h-8 sm:h-9 overflow-visible">
-          <img
-            src={logoImg}
-            alt="Maharsha Events"
-            className="w-auto object-contain h-12 sm:h-14 -my-1 sm:-my-1.5"
-          />
+        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-md border border-gold/40 flex items-center justify-center shrink-0 group-hover:border-gold transition-all duration-300">
+            <img
+              src={logoImg}
+              alt="Maharsha Events"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="hidden sm:block leading-tight">
+            <span className="font-display text-lg sm:text-xl font-bold text-gradient-gold block">
+              Maharsha Events
+            </span>
+            <span className="text-[9px] font-medium tracking-[0.18em] text-gold/80 uppercase block">
+              We Curate • You Celebrate
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}
