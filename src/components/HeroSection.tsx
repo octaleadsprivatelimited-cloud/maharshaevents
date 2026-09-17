@@ -82,7 +82,7 @@ const HeroSection = () => {
         >
           {[
             { value: "500+", label: "Events Completed" },
-            { value: "12+", label: "Years Experience" },
+            { value: "10+", label: "Years Experience" },
             { value: "50+", label: "Team Members" },
             { value: "100%", label: "Client Satisfaction" },
           ].map((stat) => (

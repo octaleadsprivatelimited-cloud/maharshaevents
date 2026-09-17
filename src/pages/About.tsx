@@ -34,7 +34,7 @@ const About = () => {
             transition={{ delay: 0.2 }}
             className="text-gold-light/60 mt-6 max-w-2xl mx-auto text-lg"
           >
-            With over 12 years of experience, we've been turning ordinary occasions
+            With over 10 years of experience, we've been turning ordinary occasions
             into extraordinary memories across India.
           </motion.p>
         </div>
