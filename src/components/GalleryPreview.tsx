@@ -129,32 +129,10 @@ const GalleryPreview = forwardRef<HTMLElement>((_, ref) => {
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
 
-                {/* Gentle minimal gradient on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300" />
-
-                {/* Minimalist Category Tag */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase text-slate-900 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm">
-                    {img.category}
-                  </span>
-                </div>
-
-                {/* Hover zoom icon */}
-                <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-800 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-sm">
-                  <ZoomIn className="w-4 h-4" />
-                </div>
-
-                {/* Bottom Caption */}
-                <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-5 z-10 text-white">
-                  <span className="text-[11px] text-amber-300 font-medium block mb-0.5">
-                    {img.highlight}
-                  </span>
-                  <h3 className="text-sm sm:text-base font-display font-semibold leading-tight drop-shadow-sm">
-                    {img.title}
-                  </h3>
-                  <div className="flex items-center gap-1.5 text-[11px] text-white/90 font-medium mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Eye className="w-3.5 h-3.5 text-amber-300" />
-                    <span>View full size</span>
+                {/* Clean hover zoom indicator */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-800 shadow-md scale-90 group-hover:scale-100 transition-transform duration-300">
+                    <ZoomIn className="w-5 h-5" />
                   </div>
                 </div>
               </div>
