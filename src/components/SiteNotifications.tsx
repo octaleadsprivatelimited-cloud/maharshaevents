@@ -20,7 +20,9 @@ function dismiss(id: string) {
   try {
     const dismissed = getDismissed();
     localStorage.setItem(DISMISSED_KEY, JSON.stringify([...dismissed, id]));
-  } catch {}
+  } catch (e) {
+    console.error("Failed to persist dismissed notification:", e);
+  }
 }
 
 const SiteNotifications = () => {

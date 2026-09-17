@@ -31,11 +31,12 @@ const AdminLogin = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code;
       const msg =
-        err.code === "auth/invalid-credential"
+        code === "auth/invalid-credential"
           ? "Invalid email or password"
-          : err.code === "auth/too-many-requests"
+          : code === "auth/too-many-requests"
           ? "Too many attempts. Try again later."
           : "Login failed. Please try again.";
       toast.error(msg);
@@ -49,8 +50,9 @@ const AdminLogin = () => {
     try {
       await signInWithPopup(auth, googleProvider);
       toast.success("Logged in with Google");
-    } catch (err: any) {
-      if (err.code !== "auth/popup-closed-by-user") {
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code;
+      if (code !== "auth/popup-closed-by-user") {
         toast.error("Google sign-in failed");
       }
     } finally {
@@ -70,9 +72,10 @@ const AdminLogin = () => {
       toast.success("Password reset email sent! Check your inbox.");
       setResetMode(false);
       setResetEmail("");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code;
       const msg =
-        err.code === "auth/user-not-found"
+        code === "auth/user-not-found"
           ? "No account found with this email"
           : "Failed to send reset email. Try again.";
       toast.error(msg);

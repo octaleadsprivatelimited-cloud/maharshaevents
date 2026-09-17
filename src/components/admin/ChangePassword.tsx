@@ -48,11 +48,12 @@ const ChangePassword = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code;
       const msg =
-        err.code === "auth/wrong-password"
+        code === "auth/wrong-password"
           ? "Current password is incorrect"
-          : err.code === "auth/requires-recent-login"
+          : code === "auth/requires-recent-login"
           ? "Please log out and log in again before changing your password"
           : "Failed to update password. Try again.";
       toast.error(msg);
