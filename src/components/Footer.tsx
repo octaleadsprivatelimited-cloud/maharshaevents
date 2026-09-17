@@ -30,10 +30,15 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <span className="font-display text-2xl font-bold text-gradient-gold">
-              Maharsha Events
-            </span>
-            <p className="text-gold-light/80 text-sm mt-4 leading-relaxed">
+            <Link to="/" className="inline-flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-full overflow-hidden bg-white p-1 shadow-md border border-gold/30 shrink-0">
+                <img src="/logo.png" alt="Maharsha Events Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="font-display text-2xl font-bold text-gradient-gold">
+                Maharsha Events
+              </span>
+            </Link>
+            <p className="text-gold-light/80 text-sm mt-3 leading-relaxed">
               Creating unforgettable moments with elegance, precision, and passion since 2012.
             </p>
             <div className="flex gap-4 mt-6">
