@@ -1,22 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown, Sparkles, ArrowUpRight } from "lucide-react";
 import { trackPhoneCall } from "@/lib/adTracking";
 
 const FooterDropdown = ({ title, children }: { title: string; children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div>
+    <div className="border-b border-white/5 pb-4 md:border-none md:pb-0">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full md:hidden font-sans text-slate-900 font-semibold text-sm mb-2"
+        className="flex items-center justify-between w-full md:hidden font-display text-gold-light text-base font-semibold py-1"
       >
-        {title}
-        <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+        <span>{title}</span>
+        <ChevronDown className={`w-4 h-4 text-gold transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
-      <h4 className="hidden md:block font-sans text-slate-900 font-bold text-sm tracking-wider uppercase mb-4">{title}</h4>
-      <div className={`flex flex-col gap-2.5 overflow-hidden transition-all duration-300 md:max-h-none ${open ? "max-h-96 mt-2" : "max-h-0 md:max-h-none"}`}>
+      <h4 className="hidden md:flex items-center gap-2 font-display text-gold-light font-semibold text-sm tracking-wider uppercase mb-5">
+        <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+        {title}
+      </h4>
+      <div className={`flex flex-col gap-3 overflow-hidden transition-all duration-300 md:max-h-none ${open ? "max-h-96 mt-3" : "max-h-0 md:max-h-none"}`}>
         {children}
       </div>
     </div>
@@ -25,103 +28,160 @@ const FooterDropdown = ({ title, children }: { title: string; children: React.Re
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-slate-700 border-t border-slate-200">
-      <div className="container mx-auto px-4 py-14">
-        <div className="grid md:grid-cols-4 gap-10">
-          {/* Brand */}
-          <div className="md:col-span-1">
-            <Link to="/" className="inline-flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden bg-white p-1 shadow-sm border border-slate-200 shrink-0">
-                <img src="/logo.png" alt="Maharsha Events Logo" className="w-full h-full object-contain" />
+    <footer className="relative bg-gradient-to-b from-navy-dark via-[#080d18] to-[#04070d] text-gold-light/80 border-t border-gold/15 overflow-hidden">
+      {/* Decorative ambient glow */}
+      <div className="absolute top-0 left-1/4 w-96 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative z-10 container mx-auto px-4 pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-14">
+          {/* Brand Column */}
+          <div className="lg:col-span-2 space-y-4 pr-0 lg:pr-6">
+            <Link to="/" className="inline-flex items-center gap-3 group">
+              <div className="w-13 h-13 rounded-xl overflow-hidden bg-white/95 p-1.5 shadow-lg border border-gold/40 shrink-0 group-hover:border-gold transition-all duration-300 group-hover:scale-105">
+                <img src="/logo.png" alt="Maharsha Events" className="w-10 h-10 object-contain" />
               </div>
-              <span className="font-display text-2xl font-bold text-slate-900">
-                Maharsha Events
-              </span>
+              <div>
+                <span className="font-display text-2xl sm:text-3xl font-bold text-gradient-gold block leading-tight">
+                  Maharsha Events
+                </span>
+                <span className="text-[11px] font-medium tracking-[0.2em] text-gold/80 uppercase block">
+                  We Curate • You Celebrate
+                </span>
+              </div>
             </Link>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              Creating unforgettable moments with elegance, precision, and passion since 2012.
+
+            <p className="text-gold-light/75 text-sm leading-relaxed max-w-md pt-1">
+              Crafting extraordinary weddings, bespoke decor, and premier corporate galas across Hyderabad, Telangana, and Andhra Pradesh with unmatched precision and artistry.
             </p>
-            <div className="flex gap-3 mt-5">
+
+            <div className="flex items-center gap-3 pt-2">
               <a
                 href="https://www.instagram.com/maharshaevents?igsh=MXRtaWhlaml1NHh6eg%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#0972d3] hover:bg-slate-200 hover:border-slate-300 transition-colors"
+                className="w-10 h-10 rounded-xl bg-white/5 border border-gold/20 flex items-center justify-center text-gold hover:text-white hover:bg-gold hover:border-gold transition-all duration-300 shadow-sm group"
                 aria-label="Instagram"
               >
-                <Instagram className="w-4 h-4" />
+                <Instagram className="w-4 h-4 transition-transform group-hover:scale-110" />
               </a>
               <a
                 href="https://www.facebook.com/story.php?story_fbid=691540436542527&id=100070597309847&mibextid=wwXIfr&rdid=RAP1DhzZTAemEq1q#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#0972d3] hover:bg-slate-200 hover:border-slate-300 transition-colors"
+                className="w-10 h-10 rounded-xl bg-white/5 border border-gold/20 flex items-center justify-center text-gold hover:text-white hover:bg-gold hover:border-gold transition-all duration-300 shadow-sm group"
                 aria-label="Facebook"
               >
-                <Facebook className="w-4 h-4" />
+                <Facebook className="w-4 h-4 transition-transform group-hover:scale-110" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <FooterDropdown title="Quick Links">
-            {["About", "Services", "Portfolio", "Contact"].map((link) => (
-              <Link
-                key={link}
-                to={`/${link.toLowerCase()}`}
-                className="text-slate-600 text-sm hover:text-[#0972d3] hover:underline transition-colors"
-              >
-                {link}
-              </Link>
-            ))}
-          </FooterDropdown>
+          <div>
+            <FooterDropdown title="Navigation">
+              {[
+                { label: "Home", path: "/" },
+                { label: "About Us", path: "/about" },
+                { label: "Services", path: "/services" },
+                { label: "Our Portfolio", path: "/portfolio" },
+                { label: "Testimonials", path: "/testimonials" },
+                { label: "Contact Us", path: "/contact" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.path}
+                  className="text-sm text-gold-light/75 hover:text-gold flex items-center gap-1.5 transition-colors group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold group-hover:w-2 transition-all duration-300" />
+                  {item.label}
+                </Link>
+              ))}
+            </FooterDropdown>
+          </div>
 
           {/* Services */}
-          <FooterDropdown title="Services">
-            {["Wedding Planning", "Corporate Events", "Birthday Parties", "Decoration", "Venue Booking"].map((s) => (
-              <span key={s} className="text-slate-600 text-sm hover:text-slate-900 cursor-default">
-                {s}
-              </span>
-            ))}
-          </FooterDropdown>
+          <div>
+            <FooterDropdown title="Our Expertise">
+              {[
+                "Destination Weddings",
+                "Grand Stage Décor",
+                "Corporate Conferences",
+                "Thematic Birthdays",
+                "Exclusive Venue Booking",
+                "Sound & Entertainment",
+              ].map((service) => (
+                <Link
+                  key={service}
+                  to="/services"
+                  className="text-sm text-gold-light/75 hover:text-gold flex items-center gap-1.5 transition-colors group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold group-hover:w-2 transition-all duration-300" />
+                  {service}
+                </Link>
+              ))}
+            </FooterDropdown>
+          </div>
 
-          {/* Contact */}
-          <FooterDropdown title="Contact">
-            <a
-              href="tel:+917893330301"
-              onClick={() => trackPhoneCall("footer")}
-              className="flex items-center gap-3 text-slate-700 text-sm font-medium hover:text-[#0972d3] hover:underline transition-colors"
-            >
-              <Phone className="w-4 h-4 shrink-0 text-[#0972d3]" />
-              +91 7893330301
-            </a>
-            <a
-              href="mailto:info@maharshaevents.com"
-              className="flex items-center gap-3 text-slate-600 text-sm hover:text-[#0972d3] hover:underline transition-colors"
-            >
-              <Mail className="w-4 h-4 shrink-0 text-slate-500" />
-              info@maharshaevents.com
-            </a>
-            <div className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-slate-500" />
-              Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir, Telangana 500091
-            </div>
-          </FooterDropdown>
+          {/* Contact Details */}
+          <div>
+            <FooterDropdown title="Reach Out">
+              <a
+                href="tel:+917893330301"
+                onClick={() => trackPhoneCall("footer")}
+                className="flex items-center gap-3 p-2.5 -mx-2.5 rounded-lg text-gold-light/80 hover:text-gold hover:bg-white/5 transition-all group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold group-hover:text-navy-dark transition-all">
+                  <Phone className="w-3.5 h-3.5 text-gold group-hover:text-navy-dark" />
+                </div>
+                <div>
+                  <span className="text-[11px] uppercase tracking-wider text-gold/60 block">Call Directly</span>
+                  <span className="text-sm font-semibold text-gold-light group-hover:text-gold">+91 7893330301</span>
+                </div>
+              </a>
+
+              <a
+                href="mailto:info@maharshaevents.com"
+                className="flex items-center gap-3 p-2.5 -mx-2.5 rounded-lg text-gold-light/80 hover:text-gold hover:bg-white/5 transition-all group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold group-hover:text-navy-dark transition-all">
+                  <Mail className="w-3.5 h-3.5 text-gold group-hover:text-navy-dark" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[11px] uppercase tracking-wider text-gold/60 block">Email Us</span>
+                  <span className="text-sm font-medium text-gold-light truncate block group-hover:text-gold">info@maharshaevents.com</span>
+                </div>
+              </a>
+
+              <div className="flex items-start gap-3 p-2.5 -mx-2.5 rounded-lg text-gold-light/75">
+                <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <MapPin className="w-3.5 h-3.5 text-gold" />
+                </div>
+                <div className="text-xs leading-relaxed">
+                  <span className="text-[11px] uppercase tracking-wider text-gold/60 block">Head Office</span>
+                  Hemagiri Nagar, Bandlaguda Jagir, Hyderabad, Telangana 500091
+                </div>
+              </div>
+            </FooterDropdown>
+          </div>
         </div>
 
-        <div className="border-t border-slate-200 mt-12 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 text-xs sm:text-sm">
+        {/* Bottom copyright & attribution bar */}
+        <div className="border-t border-gold/15 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gold-light/60">
+          <p className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-gold/70" />
             © {new Date().getFullYear()} Maharsha Events. All rights reserved.
           </p>
-          <p className="text-slate-500 text-xs sm:text-sm">
-            Developed by{" "}
+          <p>
+            Designed & Developed by{" "}
             <a
               href="https://octaleads.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#0972d3] font-medium hover:underline transition-colors"
+              className="text-gold font-medium hover:text-gold-light transition-colors inline-flex items-center gap-0.5"
             >
               Octaleads Pvt. Ltd.
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </p>
         </div>
