@@ -185,14 +185,14 @@ const Footer = () => {
             © {new Date().getFullYear()} Maharsha Events. All rights reserved.
           </p>
           <p>
-            Designed & Developed by{" "}
+            Designed by{" "}
             <a
-              href="https://octaleads.com"
+              href="https://octaleads.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gold font-medium hover:text-gold-light transition-colors inline-flex items-center gap-0.5"
             >
-              Octaleads Pvt. Ltd.
+              Octaleads
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </p>
