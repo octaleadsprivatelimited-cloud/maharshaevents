@@ -49,9 +49,9 @@ const AUTOPLAY_INTERVAL = 4000;
 
 const TestimonialsSection = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
     loop: true,
-    skipSnaps: false,
+    align: "start",
+    slidesToScroll: 1,
   });
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const TestimonialsSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <span className="text-gold text-sm font-medium tracking-[0.3em] uppercase">
             Testimonials

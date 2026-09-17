@@ -7,10 +7,10 @@ import { useBookingPopup } from "@/context/BookingPopupContext";
 const CTASection = () => {
   const { openBookingPopup } = useBookingPopup();
   return (
-    <section className="relative py-28 overflow-hidden">
+    <section className="relative py-14 md:py-16 overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: "url('/images/venue.jpg')" }}
+        style={{ backgroundImage: "url('/images/venue.webp')" }}
       />
       <div className="absolute inset-0 bg-navy-dark/85" />
 

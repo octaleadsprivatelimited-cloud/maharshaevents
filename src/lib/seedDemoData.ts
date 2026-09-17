@@ -2,12 +2,12 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 
 const DEMO_IMAGES = [
-  { url: "/images/hero-bg.jpg", caption: "Grand wedding reception", category: "Wedding" },
-  { url: "/images/corporate-event.jpg", caption: "Corporate gala", category: "Corporate" },
-  { url: "/images/wedding.jpg", caption: "Outdoor ceremony", category: "Wedding" },
-  { url: "/images/birthday.jpg", caption: "Birthday celebration", category: "Birthday" },
-  { url: "/images/decoration.jpg", caption: "Floral setup", category: "Decoration" },
-  { url: "/images/venue.jpg", caption: "Luxury venue", category: "Venue" },
+  { url: "/images/hero-bg.webp", caption: "Grand wedding reception", category: "Wedding" },
+  { url: "/images/corporate-event.webp", caption: "Corporate gala", category: "Corporate" },
+  { url: "/images/wedding.webp", caption: "Outdoor ceremony", category: "Wedding" },
+  { url: "/images/birthday.webp", caption: "Birthday celebration", category: "Birthday" },
+  { url: "/images/decoration.webp", caption: "Floral setup", category: "Decoration" },
+  { url: "/images/venue.webp", caption: "Luxury venue", category: "Venue" },
 ];
 
 const SEED_KEY = "maharsha_demo_seeded";

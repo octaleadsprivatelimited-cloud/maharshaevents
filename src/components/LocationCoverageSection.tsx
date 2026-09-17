@@ -14,13 +14,13 @@ const locations = [
 
 const LocationCoverageSection = () => {
   return (
-    <section className="py-16 bg-navy-dark/95 border-y border-gold/15 relative overflow-hidden">
+    <section className="py-10 md:py-12 bg-navy-dark/95 border-y border-gold/15 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-10"
+          className="text-center max-w-3xl mx-auto mb-7"
         >
           <div className="flex items-center justify-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-gold" />

@@ -8,44 +8,44 @@ const services = [
   {
     icon: Heart,
     title: "Wedding Planning",
-    description: "From venue selection to the last dance, we handle every aspect of your wedding with love and precision.",
-    image: "/images/wedding.jpg",
-    benefits: ["Complete wedding coordination", "Vendor management", "Theme & décor design", "Budget optimization"],
+    description: "End-to-end wedding planning services covering venue selection, décor, catering, entertainment, and day-of coordination.",
+    image: "/images/wedding.webp",
+    benefits: ["Full wedding design & styling", "Vendor management & coordination", "Budget planning & timeline tracking", "Destination wedding support"],
   },
   {
     icon: Building2,
     title: "Corporate Events",
     description: "Professional event management for conferences, seminars, product launches, and team celebrations.",
-    image: "/images/corporate-event.jpg",
+    image: "/images/corporate-event.webp",
     benefits: ["Conference management", "Product launch events", "Team building activities", "Award ceremonies"],
   },
   {
     icon: PartyPopper,
     title: "Birthday & Parties",
     description: "Creative themed parties with stunning decorations, entertainment, and flawless coordination.",
-    image: "/images/birthday.jpg",
+    image: "/images/birthday.webp",
     benefits: ["Custom theme design", "Entertainment booking", "Catering coordination", "Photography & video"],
   },
   {
     icon: Flower2,
     title: "Decoration",
     description: "Transform any space into a visual masterpiece with our expert floral and thematic designs.",
-    image: "/images/decoration.jpg",
+    image: "/images/decoration.webp",
     benefits: ["Floral arrangements", "Stage design", "Lighting setup", "Themed installations"],
   },
   {
     icon: MapPin,
     title: "Venue Booking",
     description: "Access our curated network of premium venues — from intimate halls to grand open-air spaces.",
-    image: "/images/venue.jpg",
-    benefits: ["Venue scouting", "Negotiation support", "Site inspections", "Logistics planning"],
+    image: "/images/venue.webp",
+    benefits: ["Venue scouting & selection", "Contract negotiation", "Site visits & walk-throughs", "Permits & permissions"],
   },
   {
     icon: Music,
     title: "Entertainment & Artists",
-    description: "Book top-tier performers, DJs, live bands, and artists for unforgettable entertainment.",
-    image: "/images/hero-bg.jpg",
-    benefits: ["Live music & bands", "DJ & sound", "Dance performances", "Celebrity appearances"],
+    description: "World-class performers, live bands, DJs, and sound & lighting production for an unforgettable experience.",
+    image: "/images/entertainment.webp",
+    benefits: ["Celebrity & artist booking", "Sound & lighting production", "Live bands & DJs", "Cultural performances"],
   },
 ];
 
@@ -55,7 +55,7 @@ const Services = () => {
       <Navbar />
 
       <section className="relative pt-32 pb-20">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/decoration.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/decoration.webp')" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/85 via-navy-dark/75 to-navy-dark/90" />
         <div className="relative z-10 container mx-auto px-4 text-center">
           <motion.h1
@@ -76,6 +76,7 @@ const Services = () => {
         </div>
       </section>
 
+      {/* Services Grid */}
       <section className="section-padding bg-background">
         <div className="container mx-auto grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-24">
           {services.map((service, i) => (
@@ -90,8 +91,11 @@ const Services = () => {
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="rounded-xl shadow-lg w-full h-44 md:h-80 object-cover"
+                  width="600"
+                  height="400"
                   loading="lazy"
+                  decoding="async"
+                  className="rounded-xl shadow-lg w-full h-44 md:h-80 object-cover"
                 />
               </div>
               <div className={i % 2 === 1 ? "md:order-1" : ""}>

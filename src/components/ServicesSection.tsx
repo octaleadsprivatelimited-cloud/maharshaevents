@@ -7,37 +7,37 @@ const services = [
     icon: Heart,
     title: "Wedding Planning",
     description: "From intimate ceremonies to grand celebrations, we create the wedding of your dreams.",
-    image: "/images/wedding.jpg",
+    image: "/images/wedding.webp",
   },
   {
     icon: Building2,
     title: "Corporate Events",
     description: "Professional conferences, product launches, and team-building events executed flawlessly.",
-    image: "/images/corporate-event.jpg",
+    image: "/images/corporate-event.webp",
   },
   {
     icon: PartyPopper,
     title: "Birthday & Parties",
     description: "Memorable celebrations with creative themes, stunning décor, and seamless coordination.",
-    image: "/images/birthday.jpg",
+    image: "/images/birthday.webp",
   },
   {
     icon: Flower2,
     title: "Decoration",
     description: "Exquisite floral arrangements and thematic designs that transform any space.",
-    image: "/images/decoration.jpg",
+    image: "/images/decoration.webp",
   },
   {
     icon: MapPin,
     title: "Venue Booking",
     description: "Access to an exclusive network of premium venues perfectly suited for your occasion.",
-    image: "/images/venue.jpg",
+    image: "/images/venue.webp",
   },
   {
     icon: Music,
-    title: "Entertainment",
-    description: "Top-tier artists, DJs, and performers to keep your guests entertained all night.",
-    image: "/images/hero-bg.jpg",
+    title: "Entertainment & Artists",
+    description: "Top-tier artists, live DJs, and performers to keep your guests energized all night.",
+    image: "/images/entertainment.webp",
   },
 ];
 
@@ -49,7 +49,7 @@ const ServicesSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <span className="text-gold text-sm font-medium tracking-[0.3em] uppercase">
             What We Offer
@@ -79,8 +79,11 @@ const ServicesSection = () => {
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  width="600"
+                  height="400"
                   loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/95 via-navy-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-3 md:p-6">

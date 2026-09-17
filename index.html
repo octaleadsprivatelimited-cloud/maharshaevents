@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="icon" type="image/webp" sizes="32x32" href="/favicon-32x32.webp" />
+    <link rel="icon" type="image/webp" sizes="16x16" href="/favicon-16x16.webp" />
+    <link rel="icon" type="image/webp" href="/logo.webp" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Maharsha Events | Best Event Management & Wedding Planners in Hyderabad, Telangana & AP</title>
     
@@ -29,34 +29,55 @@
     <meta property="og:site_name" content="Maharsha Events" />
     <meta property="og:title" content="Maharsha Events | Luxury Wedding Planners & Event Management in Hyderabad & AP" />
     <meta property="og:description" content="Turn your dream celebration into reality with Maharsha Events. Serving Hyderabad, Secunderabad, Vijayawada, Vizag, and across Telangana & Andhra Pradesh. 500+ successful events." />
-    <meta property="og:image" content="/images/wedding.jpg" />
+    <meta property="og:image" content="/images/wedding.webp" />
     <meta property="og:locale" content="en_IN" />
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Maharsha Events | Premium Event Planning in Telangana & Andhra Pradesh" />
     <meta name="twitter:description" content="Crafting unforgettable weddings, corporate conferences, and grand celebrations across Hyderabad, Vijayawada, and Vizag. Free consultations available." />
-    <meta name="twitter:image" content="/images/wedding.jpg" />
+    <meta name="twitter:image" content="/images/wedding.webp" />
 
-    <!-- Google Ads & Meta Pixel Setup -->
-    <!-- Replace 'AW-CONVERSION_ID' and 'META_PIXEL_ID' with live IDs when ready -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="/images/hero-bg.webp" fetchpriority="high" type="image/webp" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" />
+    </noscript>
+
+    <!-- Google Ads & Meta Pixel Setup (Non-blocking & PageSpeed optimized) -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      // gtag('config', 'AW-XXXXXXXXXX');
-    </script>
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      // fbq('init', 'YOUR_PIXEL_ID');
-      fbq('track', 'PageView');
+
+      // Load Facebook Pixel on idle or user interaction to prevent blocking LCP / TBT
+      function loadMetaPixel() {
+        if (window._fb_loaded) return;
+        window._fb_loaded = true;
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        if (window.fbq) {
+          window.fbq('track', 'PageView');
+        }
+      }
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(function() { setTimeout(loadMetaPixel, 2000); });
+      } else {
+        setTimeout(loadMetaPixel, 3000);
+      }
+      ['scroll', 'mousemove', 'touchstart', 'click'].forEach(function(evt) {
+        window.addEventListener(evt, loadMetaPixel, { once: true, passive: true });
+      });
     </script>
 
     <!-- Schema.org Rich Snippets: LocalBusiness, EventPlanner, and FAQ -->
@@ -69,11 +90,11 @@
           "@id": "https://maharshaevents.com/#organization",
           "name": "Maharsha Events",
           "url": "https://maharshaevents.com",
-          "logo": "https://maharshaevents.com/logo.png",
-          "image": "https://maharshaevents.com/images/wedding.jpg",
+          "logo": "https://maharshaevents.com/logo.webp",
+          "image": "https://maharshaevents.com/images/wedding.webp",
           "description": "Leading event management and luxury wedding planning company serving Hyderabad, Secunderabad, Telangana, and Andhra Pradesh.",
           "telephone": "+917893330301",
-          "email": "info@maharshaevents.com",
+          "email": "maharshaevents2018@gmail.com",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Hemagiri Nagar, Shanthinagar Colony, Hydershakote, Bandlaguda Jagir",

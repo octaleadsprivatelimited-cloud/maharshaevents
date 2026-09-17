@@ -29,28 +29,45 @@ const SiteNotifications = () => {
   const [showBanner, setShowBanner] = useState<SiteNotification | null>(null);
 
   useEffect(() => {
-    const q = query(collection(db, "notifications"), where("active", "==", true));
-    const unsub = onSnapshot(q, (snap) => {
-      const dismissed = getDismissed();
-      const active = snap.docs
-        .map((d) => ({ id: d.id, ...d.data() } as SiteNotification))
-        .filter((n) => !dismissed.includes(n.id));
+    let unsub: (() => void) | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
-      // Show toasts
-      active
-        .filter((n) => n.type === "toast")
-        .forEach((n) => {
-          toast(n.title, { description: n.message, duration: 6000 });
-          dismiss(n.id);
-        });
+    const startListener = () => {
+      const q = query(collection(db, "notifications"), where("active", "==", true));
+      unsub = onSnapshot(q, (snap) => {
+        const dismissed = getDismissed();
+        const active = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() } as SiteNotification))
+          .filter((n) => !dismissed.includes(n.id));
 
-      // Show first active banner
-      const bannerNotifs = active.filter((n) => n.type === "banner");
-      if (bannerNotifs.length > 0 && !showBanner) {
-        setShowBanner(bannerNotifs[0]);
-      }
-    });
-    return unsub;
+        // Show toasts
+        active
+          .filter((n) => n.type === "toast")
+          .forEach((n) => {
+            toast(n.title, { description: n.message, duration: 6000 });
+            dismiss(n.id);
+          });
+
+        // Show first active banner
+        const bannerNotifs = active.filter((n) => n.type === "banner");
+        if (bannerNotifs.length > 0 && !showBanner) {
+          setShowBanner(bannerNotifs[0]);
+        }
+      });
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      (window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(() => {
+        timer = setTimeout(startListener, 1500);
+      });
+    } else {
+      timer = setTimeout(startListener, 2500);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      if (unsub) unsub();
+    };
   }, []);
 
   const closeBanner = () => {

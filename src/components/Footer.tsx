@@ -39,7 +39,15 @@ const Footer = () => {
           <div className="lg:col-span-2 space-y-4 pr-0 lg:pr-6">
             <Link to="/" className="inline-flex items-center gap-3 group">
               <div className="w-13 h-13 rounded-xl overflow-hidden bg-white/95 p-1.5 shadow-lg border border-gold/40 shrink-0 group-hover:border-gold transition-all duration-300 group-hover:scale-105">
-                <img src="/logo.png" alt="Maharsha Events" className="w-10 h-10 object-contain" />
+                <img
+                  src="/logo.webp"
+                  alt="Maharsha Events"
+                  width="40"
+                  height="40"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div>
                 <span className="font-display text-2xl sm:text-3xl font-bold text-gradient-gold block leading-tight">
@@ -141,7 +149,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="mailto:info@maharshaevents.com"
+                href="mailto:maharshaevents2018@gmail.com"
                 className="flex items-center gap-3 p-2.5 -mx-2.5 rounded-lg text-gold-light/80 hover:text-gold hover:bg-white/5 transition-all group"
               >
                 <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold group-hover:text-navy-dark transition-all">
@@ -149,7 +157,7 @@ const Footer = () => {
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] uppercase tracking-wider text-gold/60 block">Email Us</span>
-                  <span className="text-sm font-medium text-gold-light truncate block group-hover:text-gold">info@maharshaevents.com</span>
+                  <span className="text-sm font-medium text-gold-light truncate block group-hover:text-gold">maharshaevents2018@gmail.com</span>
                 </div>
               </a>
 
