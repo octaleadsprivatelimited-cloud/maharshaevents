@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { toast } from "sonner";
 import { saveEnquiry } from "@/lib/useFirebaseData";
+import { trackLeadConversion, getAdTrackingData, trackPhoneCall } from "@/lib/adTracking";
 
 const contactInfo = [
   { icon: Phone, label: "Phone", value: "+91 7893330301", href: "tel:+917893330301" },
@@ -19,22 +20,37 @@ const contactInfo = [
 const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const adData = getAdTrackingData();
       await saveEnquiry({
-        source: "contact",
+        source: "contact_page",
         name,
         email,
+        phone: phone || "Not provided",
+        city: city || "Hyderabad/AP/Telangana",
         subject,
         message,
+        ...adData,
       });
+
+      trackLeadConversion({
+        source: "contact_page",
+        eventType: subject || "General Event Enquiry",
+        city: city || "Telangana & AP",
+      });
+
       toast.success("Message sent! We'll respond within 24 hours.");
       setName("");
       setEmail("");
+      setPhone("");
+      setCity("");
       setSubject("");
       setMessage("");
     } catch {
@@ -78,7 +94,14 @@ const Contact = () => {
               </p>
               <div className="space-y-6">
                 {contactInfo.map((c) => (
-                  <a key={c.label} href={c.href} className="flex items-center gap-4 group">
+                  <a
+                    key={c.label}
+                    href={c.href}
+                    onClick={() => {
+                      if (c.label === "Phone") trackPhoneCall("contact_page");
+                    }}
+                    className="flex items-center gap-4 group"
+                  >
                     <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                       <c.icon className="w-5 h-5 text-gold" />
                     </div>
@@ -106,6 +129,16 @@ const Contact = () => {
                 <div>
                   <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
                   <Input required type="email" placeholder="your@email.com" className="bg-background" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Phone Number *</label>
+                  <Input required type="tel" placeholder="+91 98765 43210" className="bg-background" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Location / City</label>
+                  <Input placeholder="e.g. Hyderabad, Vijayawada, Vizag" className="bg-background" value={city} onChange={(e) => setCity(e.target.value)} />
                 </div>
               </div>
               <div>

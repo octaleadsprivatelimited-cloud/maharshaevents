@@ -20,12 +20,14 @@ import { toast } from "sonner";
 import { Send } from "lucide-react";
 import { saveEnquiry } from "@/lib/useFirebaseData";
 import { useBookingPopup } from "@/context/BookingPopupContext";
+import { trackLeadConversion, getAdTrackingData } from "@/lib/adTracking";
 
 const BookingFormPopup = () => {
   const { isOpen, closeBookingPopup } = useBookingPopup();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
   const [eventType, setEventType] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [budget, setBudget] = useState("");
@@ -34,16 +36,28 @@ const BookingFormPopup = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const adData = getAdTrackingData();
       await saveEnquiry({
-        source: "booking",
+        source: "booking_ad_ready",
         name,
         email,
         phone,
+        city: city || "Not specified",
         eventType,
         eventDate,
         budget,
         message,
+        ...adData,
       });
+
+      // Fire conversion for Google Ads & Meta Ads
+      trackLeadConversion({
+        source: "booking_popup",
+        eventType,
+        city,
+        budget,
+      });
+
       toast.success("Thank you! We'll get back to you within 24 hours.");
       closeBookingPopup();
     } catch {
@@ -124,19 +138,39 @@ const BookingFormPopup = () => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground mb-1.5 block">Budget Range</label>
-              <Select value={budget} onValueChange={setBudget}>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Event Location / City *</label>
+              <Select required value={city} onValueChange={setCity}>
                 <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Select budget" />
+                  <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</SelectItem>
-                  <SelectItem value="₹1,00,000 - ₹5,00,000">₹1,00,000 - ₹5,00,000</SelectItem>
-                  <SelectItem value="₹5,00,000 - ₹10,00,000">₹5,00,000 - ₹10,00,000</SelectItem>
-                  <SelectItem value="₹10,00,000+">₹10,00,000+</SelectItem>
+                  <SelectItem value="Hyderabad">Hyderabad & Secunderabad (TG)</SelectItem>
+                  <SelectItem value="Warangal">Warangal (TG)</SelectItem>
+                  <SelectItem value="Karimnagar">Karimnagar (TG)</SelectItem>
+                  <SelectItem value="Other-Telangana">Other Telangana</SelectItem>
+                  <SelectItem value="Vijayawada">Vijayawada (AP)</SelectItem>
+                  <SelectItem value="Visakhapatnam">Visakhapatnam / Vizag (AP)</SelectItem>
+                  <SelectItem value="Guntur">Guntur (AP)</SelectItem>
+                  <SelectItem value="Tirupati">Tirupati (AP)</SelectItem>
+                  <SelectItem value="Other-AP">Other Andhra Pradesh</SelectItem>
+                  <SelectItem value="Destination">Destination Wedding / Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground mb-1.5 block">Budget Range</label>
+            <Select value={budget} onValueChange={setBudget}>
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Select budget" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</SelectItem>
+                <SelectItem value="₹1,00,000 - ₹5,00,000">₹1,00,000 - ₹5,00,000</SelectItem>
+                <SelectItem value="₹5,00,000 - ₹10,00,000">₹5,00,000 - ₹10,00,000</SelectItem>
+                <SelectItem value="₹10,00,000+">₹10,00,000+ (Luxury / Grand)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="text-sm font-medium text-foreground mb-1.5 block">Message</label>

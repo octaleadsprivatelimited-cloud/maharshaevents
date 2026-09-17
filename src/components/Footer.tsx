@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown } from "lucide-react";
+import { trackPhoneCall } from "@/lib/adTracking";
 
 const FooterDropdown = ({ title, children }: { title: string; children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -79,7 +80,11 @@ const Footer = () => {
 
           {/* Contact */}
           <FooterDropdown title="Contact">
-            <a href="tel:+917893330301" className="flex items-center gap-3 text-gold-light/80 text-sm hover:text-gold transition-colors">
+            <a
+              href="tel:+917893330301"
+              onClick={() => trackPhoneCall("footer")}
+              className="flex items-center gap-3 text-gold-light/80 text-sm hover:text-gold transition-colors"
+            >
               <Phone className="w-4 h-4 shrink-0" />
               +91 7893330301
             </a>

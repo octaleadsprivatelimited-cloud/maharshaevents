@@ -10,6 +10,7 @@ import SiteNotifications from "./components/SiteNotifications";
 import BookingFormPopup from "./components/BookingFormPopup";
 import { BookingPopupProvider } from "./context/BookingPopupContext";
 import { seedDemoImages } from "./lib/seedDemoData";
+import { initAdTracking } from "./lib/adTracking";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -24,6 +25,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
+    initAdTracking();
     seedDemoImages();
   }, []);
 

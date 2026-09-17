@@ -1,10 +1,13 @@
+import { trackWhatsAppClick } from "@/lib/adTracking";
+
 const WhatsAppButton = () => {
   return (
     <a
-      href="https://wa.me/917893330301"
+      href="https://wa.me/917893330301?text=Hi%20Maharsha%20Events%2C%20I%20would%20like%20to%20enquire%20about%20event%20planning%20services."
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
+      onClick={() => trackWhatsAppClick("floating_button")}
       className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-xl transition-all duration-300"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
@@ -15,3 +18,4 @@ const WhatsAppButton = () => {
 };
 
 export default WhatsAppButton;
+

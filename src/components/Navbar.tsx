@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@/assets/logo.png";
 import { useBookingPopup } from "@/context/BookingPopupContext";
+import { trackPhoneCall } from "@/lib/adTracking";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -64,7 +65,11 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <a href="tel:+917893330301" className="flex items-center gap-2 text-gold-light/70 text-sm">
+          <a
+            href="tel:+917893330301"
+            onClick={() => trackPhoneCall("navbar_desktop")}
+            className="flex items-center gap-2 text-gold-light/70 text-sm hover:text-gold transition-colors"
+          >
             <Phone className="w-4 h-4" />
             +91 7893330301
           </a>
