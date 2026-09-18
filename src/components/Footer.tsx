@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown, Sparkles, ArrowUpRight } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, ChevronDown, Sparkles, ArrowUpRight, Lock } from "lucide-react";
 import { trackPhoneCall } from "@/lib/adTracking";
 
 const FooterDropdown = ({ title, children }: { title: string; children: React.ReactNode }) => {
@@ -184,18 +184,28 @@ const Footer = () => {
             <Sparkles className="w-3.5 h-3.5 text-gold/70" />
             © {new Date().getFullYear()} Maharsha Events. All rights reserved.
           </p>
-          <p>
-            Designed by{" "}
-            <a
-              href="https://octaleads.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gold font-medium hover:text-gold-light transition-colors inline-flex items-center gap-0.5"
+          <div className="flex items-center gap-5">
+            <Link
+              to="/admin"
+              className="text-gold-light/40 hover:text-gold transition-colors inline-flex items-center gap-1 text-[11px]"
+              title="Admin Portal"
             >
-              Octaleads
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </p>
+              <Lock className="w-3 h-3 text-gold/60" />
+              <span>Admin</span>
+            </Link>
+            <p>
+              Designed by{" "}
+              <a
+                href="https://octaleads.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold font-medium hover:text-gold-light transition-colors inline-flex items-center gap-0.5"
+              >
+                Octaleads
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

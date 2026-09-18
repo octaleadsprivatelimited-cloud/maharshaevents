@@ -6,7 +6,6 @@ import {
   ImagePlus,
   Youtube,
   BellRing,
-  KeyRound,
   LogOut,
   Users,
 } from "lucide-react";
@@ -15,19 +14,17 @@ import ImageManager from "@/components/admin/ImageManager";
 import VideoManager from "@/components/admin/VideoManager";
 import NotificationManager from "@/components/admin/NotificationManager";
 import EnquiryManager from "@/components/admin/EnquiryManager";
-import ChangePassword from "@/components/admin/ChangePassword";
 import AdminLogin from "@/components/admin/AdminLogin";
 import { cn } from "@/lib/utils";
-import { auth, ADMIN_EMAILS } from "@/lib/firebase";
+import { auth, isAdminEmail, getAdminSession, clearAdminSession } from "@/lib/firebase";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { toast } from "sonner";
 
 const NAV_ITEMS = [
   { id: "enquiries", label: "Enquiries", icon: Users, description: "Customer submissions & follow-ups" },
-  { id: "images", label: "Gallery Images", icon: ImagePlus, description: "Upload & manage gallery" },
-  { id: "videos", label: "YouTube Videos", icon: Youtube, description: "Embed video content" },
-  { id: "notifications", label: "Notifications", icon: BellRing, description: "Site announcements" },
-  { id: "password", label: "Change Password", icon: KeyRound, description: "Update your credentials" },
+  { id: "images", label: "Gallery Images", icon: ImagePlus, description: "Upload & manage gallery photos" },
+  { id: "videos", label: "YouTube Videos", icon: Youtube, description: "Embed & organize video content" },
+  { id: "notifications", label: "Notifications", icon: BellRing, description: "Site promotional announcements" },
 ] as const;
 
 type TabId = (typeof NAV_ITEMS)[number]["id"];
@@ -36,6 +33,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState<TabId>("enquiries");
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [adminSession, setAdminSessionState] = useState(() => getAdminSession());
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
@@ -45,17 +43,27 @@ const Admin = () => {
     return unsub;
   }, []);
 
+  const isAuthorized = Boolean((user && isAdminEmail(user.email)) || adminSession?.authenticated);
+
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      toast.success("Logged out");
+      clearAdminSession();
+      setAdminSessionState(null);
+      if (auth.currentUser) {
+        await signOut(auth);
+      }
+      setUser(null);
+      toast.success("Logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Logout failed. Please try again.");
+      clearAdminSession();
+      setAdminSessionState(null);
+      setUser(null);
+      toast.success("Logged out");
     }
   };
 
-  if (authLoading) {
+  if (authLoading && !adminSession?.authenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <p className="text-muted-foreground">Loading...</p>
@@ -63,9 +71,17 @@ const Admin = () => {
     );
   }
 
-  if (!user || !ADMIN_EMAILS.includes(user.email || "")) {
-    return <AdminLogin />;
+  if (!isAuthorized) {
+    return (
+      <AdminLogin
+        onLoginSuccess={() => {
+          setAdminSessionState(getAdminSession());
+        }}
+      />
+    );
   }
+
+  const displayEmail = user?.email || adminSession?.email || "maharshaevents2018@gmail.com";
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,16 +89,29 @@ const Admin = () => {
       <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <LayoutDashboard className="h-4 w-4 text-primary-foreground" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white p-1 border border-gold/40 shadow-sm shrink-0">
+              <img
+                src="/logo.webp"
+                alt="Maharsha Events"
+                width="28"
+                height="28"
+                className="h-full w-full object-contain"
+              />
             </div>
             <div>
               <h1 className="font-display text-lg font-semibold text-foreground">Admin Panel</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="hidden text-sm text-muted-foreground md:inline">
-              {user.email}
+            {user?.photoURL && (
+              <img
+                src={user.photoURL}
+                alt="Admin"
+                className="h-7 w-7 rounded-full border border-gold/40 object-cover"
+              />
+            )}
+            <span className="hidden text-sm text-muted-foreground md:inline font-mono">
+              {displayEmail}
             </span>
             <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5">
               <LogOut className="h-3.5 w-3.5" /> Logout
@@ -163,7 +192,6 @@ const Admin = () => {
             {activeTab === "images" && <ImageManager />}
             {activeTab === "videos" && <VideoManager />}
             {activeTab === "notifications" && <NotificationManager />}
-            {activeTab === "password" && <ChangePassword />}
           </div>
         </main>
       </div>

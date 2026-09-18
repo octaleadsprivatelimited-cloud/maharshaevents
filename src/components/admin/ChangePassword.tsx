@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { auth } from "@/lib/firebase";
+import { auth, getAdminPasscode, setAdminPasscode, verifyAdminPasscode } from "@/lib/firebase";
 import {
   updatePassword,
   reauthenticateWithCredential,
@@ -9,10 +9,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lock, Eye, EyeOff } from "lucide-react";
+import { Lock, KeyRound, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 const ChangePassword = () => {
+  // Master Passcode states
+  const [currentPasscode, setCurrentPasscode] = useState("");
+  const [newPasscode, setNewPasscode] = useState("");
+  const [confirmPasscode, setConfirmPasscode] = useState("");
+
+  // Firebase Auth states
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,9 +27,31 @@ const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
 
   const user = auth.currentUser;
-  const isGoogleOnly = user?.providerData.every((p) => p.providerId === "google.com");
+  const hasEmailProvider = user?.providerData.some((p) => p.providerId === "password");
 
-  const handleChangePassword = async (e: React.FormEvent) => {
+  const handleUpdatePasscode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!verifyAdminPasscode(currentPasscode)) {
+      toast.error("Current admin passcode is incorrect");
+      return;
+    }
+    if (newPasscode.length < 6) {
+      toast.error("New passcode must be at least 6 characters");
+      return;
+    }
+    if (newPasscode !== confirmPasscode) {
+      toast.error("New passcodes do not match");
+      return;
+    }
+
+    setAdminPasscode(newPasscode.trim());
+    toast.success("Admin Master Passcode updated successfully!");
+    setCurrentPasscode("");
+    setNewPasscode("");
+    setConfirmPasscode("");
+  };
+
+  const handleChangeFirebasePassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword.length < 6) {
@@ -39,12 +67,11 @@ const ChangePassword = () => {
     try {
       if (!user) throw new Error("Not authenticated");
 
-      // Re-authenticate first
       const credential = EmailAuthProvider.credential(user.email!, currentPassword);
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPassword);
 
-      toast.success("Password updated successfully");
+      toast.success("Firebase account password updated successfully");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -62,94 +89,140 @@ const ChangePassword = () => {
     }
   };
 
-  if (isGoogleOnly) {
-    return (
-      <Card>
+  return (
+    <div className="space-y-6">
+      {/* ── Admin Master Passcode Card ── */}
+      <Card className="border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Lock className="h-5 w-5" /> Change Password
+          <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
+            <KeyRound className="h-5 w-5 text-primary" /> Admin Master Passcode
           </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Update the quick-access PIN used to log into this admin panel.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Your account uses Google Sign-In. Password management is handled through your Google
-            account settings.
-          </p>
+          <form onSubmit={handleUpdatePasscode} className="space-y-4 max-w-md">
+            <div className="space-y-1.5">
+              <Label htmlFor="current-passcode" className="text-xs">Current Passcode</Label>
+              <Input
+                id="current-passcode"
+                type="password"
+                value={currentPasscode}
+                onChange={(e) => setCurrentPasscode(e.target.value)}
+                placeholder="Enter current passcode"
+                className="bg-background/50"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="new-passcode" className="text-xs">New Passcode</Label>
+              <Input
+                id="new-passcode"
+                type="password"
+                value={newPasscode}
+                onChange={(e) => setNewPasscode(e.target.value)}
+                placeholder="Min 6 characters"
+                className="bg-background/50"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm-passcode" className="text-xs">Confirm New Passcode</Label>
+              <Input
+                id="confirm-passcode"
+                type="password"
+                value={confirmPasscode}
+                onChange={(e) => setConfirmPasscode(e.target.value)}
+                placeholder="Repeat new passcode"
+                className="bg-background/50"
+              />
+            </div>
+
+            <Button type="submit" size="sm" className="gap-1.5 bg-primary text-primary-foreground font-medium">
+              <ShieldCheck className="h-4 w-4" /> Save New Passcode
+            </Button>
+          </form>
         </CardContent>
       </Card>
-    );
-  }
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Lock className="h-5 w-5" /> Change Password
-        </CardTitle>
-        <CardDescription>Update your admin password</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleChangePassword} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
-            <div className="relative">
-              <Input
-                id="current-password"
-                type={showCurrent ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="••••••••"
-                className="pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowCurrent(!showCurrent)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-          </div>
+      {/* ── Firebase Password Card (if email account) ── */}
+      {hasEmailProvider && (
+        <Card className="border-border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
+              <Lock className="h-5 w-5 text-primary" /> Firebase Account Password
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground">
+              Update your Firebase email login password for {user?.email}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleChangeFirebasePassword} className="space-y-4 max-w-md">
+              <div className="space-y-1.5">
+                <Label htmlFor="current-password" className="text-xs">Current Password</Label>
+                <div className="relative">
+                  <Input
+                    id="current-password"
+                    type={showCurrent ? "text" : "password"}
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="pr-10 bg-background/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrent(!showCurrent)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
-            <div className="relative">
-              <Input
-                id="new-password"
-                type={showNew ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="••••••••"
-                className="pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowNew(!showNew)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-          </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="new-password" className="text-xs">New Password</Label>
+                <div className="relative">
+                  <Input
+                    id="new-password"
+                    type={showNew ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="pr-10 bg-background/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
-            />
-          </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="confirm-password" className="text-xs">Confirm New Password</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="bg-background/50"
+                />
+              </div>
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Password"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+              <Button type="submit" size="sm" disabled={loading} className="gap-1.5">
+                {loading ? "Updating..." : "Update Firebase Password"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 
 export default ChangePassword;
+
