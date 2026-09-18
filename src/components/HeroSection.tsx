@@ -66,16 +66,22 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-row flex-wrap gap-3 justify-center items-center"
+          className="flex flex-row flex-wrap gap-3.5 justify-center items-center p-2 rounded-2xl bg-navy-dark/60 backdrop-blur-md border border-gold/30 shadow-2xl max-w-fit mx-auto"
         >
-          <Button variant="hero" size="lg" className="text-sm px-6 py-4 shadow-xl shadow-gold/25 font-bold" onClick={openBookingPopup}>
-            Book Your Event
-            <ArrowRight className="w-4 h-4 ml-1.5" />
-          </Button>
+          <button
+            onClick={openBookingPopup}
+            className="group relative inline-flex items-center justify-center gap-2.5 px-7 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base font-extrabold text-[#050914] bg-gradient-to-r from-[#FFF176] via-[#FFD54F] to-[#FFB300] border-2 border-white shadow-[0_10px_25px_rgba(0,0,0,0.7),0_0_20px_rgba(255,213,79,0.6)] hover:shadow-[0_15px_35px_rgba(0,0,0,0.85),0_0_30px_rgba(255,213,79,0.8)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-[#050914] fill-current animate-pulse" />
+            <span className="tracking-wide">Book Your Event</span>
+            <ArrowRight className="w-4 h-4 text-[#050914] stroke-[2.5] transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
           <Link to="/portfolio">
-            <Button variant="hero-outline" size="lg" className="text-sm px-6 py-4 bg-navy-dark/60 backdrop-blur-md border-gold/70 text-white hover:text-gold shadow-xl font-bold">
-              View Our Work
-            </Button>
+            <button
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-7 sm:py-4 rounded-xl text-sm sm:text-base font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/50 hover:border-gold backdrop-blur-md shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+            >
+              <span>View Our Work</span>
+            </button>
           </Link>
         </motion.div>
 
