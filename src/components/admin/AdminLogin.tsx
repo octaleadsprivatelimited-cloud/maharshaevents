@@ -80,34 +80,31 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   // ─── Unauthorized Account View ───
   if (currentUser && !isAdminEmail(currentUser.email)) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center bg-[#060a12] p-4 text-foreground selection:bg-gold/20 selection:text-gold-light">
-        {/* Ambient background glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-950/15 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative z-10 w-full max-w-md rounded-2xl border border-red-500/20 bg-[#0c121e]/95 p-8 shadow-2xl backdrop-blur-xl">
+      <div className="relative flex min-h-screen items-center justify-center bg-white p-4 text-zinc-900">
+        <div className="relative z-10 w-full max-w-md rounded-2xl border border-red-200 bg-white p-8 shadow-xl">
           <div className="flex flex-col items-center text-center space-y-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 shadow-inner">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 border border-red-200 text-red-600 shadow-sm">
               <ShieldAlert className="h-7 w-7" />
             </div>
 
             <div className="space-y-1.5">
-              <h1 className="font-display text-2xl font-bold tracking-tight text-white">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-zinc-900">
                 Access Denied
               </h1>
-              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+              <p className="text-xs text-zinc-500 max-w-xs mx-auto">
                 You are currently authenticated as:
               </p>
-              <div className="inline-block rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-mono text-zinc-300">
+              <div className="inline-block rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-mono text-zinc-700 font-medium">
                 {currentUser.email}
               </div>
             </div>
 
-            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-left text-xs leading-relaxed text-amber-200/90">
-              <p className="font-semibold text-amber-300 mb-1 flex items-center gap-1.5">
-                <ShieldAlert className="h-3.5 w-3.5 shrink-0" /> Restricted Access
+            <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-3.5 text-left text-xs leading-relaxed text-amber-900">
+              <p className="font-semibold text-amber-800 mb-1 flex items-center gap-1.5">
+                <ShieldAlert className="h-3.5 w-3.5 shrink-0 text-amber-600" /> Restricted Access
               </p>
               Admin panel access is strictly reserved for the primary administrator at{" "}
-              <span className="font-mono text-white font-semibold underline underline-offset-2">
+              <span className="font-mono font-semibold underline underline-offset-2 text-zinc-900">
                 {MAIN_ADMIN_EMAIL}
               </span>.
             </div>
@@ -116,14 +113,14 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
               <Button
                 type="button"
                 onClick={handleSignOutCurrentUser}
-                className="w-full gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-medium shadow-lg transition-all"
+                className="w-full gap-2 bg-red-600 hover:bg-red-700 text-white font-medium shadow transition-all"
               >
                 <LogOut className="h-4 w-4" /> Sign In with Different Account
               </Button>
 
               <Link
                 to="/"
-                className="inline-flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-white transition-colors w-full pt-2"
+                className="inline-flex items-center justify-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors w-full pt-2"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Return to Website
               </Link>
@@ -134,17 +131,16 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
     );
   }
 
-  // ─── Professional Luxury Login View ───
+  // ─── Clean White Professional Login View ───
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#060a12] p-4 text-foreground selection:bg-gold/20 selection:text-gold-light">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/3 w-[450px] h-[450px] bg-[#d4af37]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/3 w-[450px] h-[450px] bg-[#0ea5e9]/5 rounded-full blur-[140px] pointer-events-none" />
+    <div className="relative flex min-h-screen items-center justify-center bg-white p-4 text-zinc-900 selection:bg-amber-100 selection:text-amber-900">
+      {/* Subtle warm ambient background glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[550px] bg-amber-50/60 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-md rounded-2xl border border-gold/20 bg-[#0c121e]/90 p-8 shadow-2xl backdrop-blur-2xl transition-all">
+      <div className="relative z-10 w-full max-w-md rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all">
         {/* Header section with brand logo */}
         <div className="flex flex-col items-center text-center space-y-3 pb-6">
-          <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl bg-white/95 p-3 shadow-2xl border-2 border-gold/40 hover:border-gold transition-all duration-300">
+          <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl bg-white p-3 shadow-lg border border-zinc-200/80 hover:border-amber-400 transition-all duration-300">
             <img
               src="/logo.webp"
               alt="Maharsha Events"
@@ -154,18 +150,18 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
             />
           </div>
 
-          <div className="space-y-1">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-gradient-gold">
+          <div className="space-y-1 pt-1">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-zinc-900">
               Maharsha Events
             </h1>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-gold/30 bg-gold/5 text-[10px] font-semibold tracking-wider uppercase text-gold">
-              <ShieldCheck className="w-3 h-3" /> Admin Portal
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full border border-amber-300/60 bg-amber-50 text-[10px] font-semibold tracking-wider uppercase text-amber-800">
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600" /> Admin Portal
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/5 pb-6" />
+        <div className="border-t border-zinc-100 pb-6" />
 
         {/* Sign In Action Area */}
         <div className="space-y-4">
@@ -174,10 +170,10 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
             variant="outline"
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full h-12 gap-3 border-white/10 bg-white hover:bg-zinc-100 text-zinc-900 font-medium text-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            className="w-full h-12 gap-3 border border-zinc-300 bg-white hover:bg-zinc-50 hover:border-zinc-400 text-zinc-800 font-semibold text-sm rounded-xl shadow-sm hover:shadow transition-all duration-200"
           >
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-zinc-700" />
+              <Loader2 className="h-4 w-4 animate-spin text-zinc-600" />
             ) : (
               <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24">
                 <path
@@ -203,10 +199,10 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
         </div>
 
         {/* Footer Navigation */}
-        <div className="pt-6 text-center border-t border-white/5 mt-6">
+        <div className="pt-6 text-center border-t border-zinc-100 mt-6">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gold transition-colors font-medium"
+            className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors font-medium"
           >
             <ArrowLeft className="h-3 w-3" /> Back to website
           </Link>
