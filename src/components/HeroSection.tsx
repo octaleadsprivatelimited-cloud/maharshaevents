@@ -94,7 +94,7 @@ const HeroSection = () => {
         >
           {[
             { value: "500+", label: "Events Done" },
-            { value: "10+", label: "Years Exp." },
+            { value: "2018", label: "Founded" },
             { value: "50+", label: "Team Size" },
             { value: "100%", label: "Satisfaction" },
           ].map((stat) => (

@@ -60,7 +60,7 @@ const Footer = () => {
             </Link>
 
             <p className="text-gold-light/75 text-sm leading-relaxed max-w-md pt-1">
-              Crafting extraordinary weddings, bespoke decor, and premier corporate galas across Hyderabad, Telangana, and Andhra Pradesh with unmatched precision and artistry.
+              Founded in 2018, Maharsha Events crafts extraordinary weddings, bespoke decor, and premier corporate galas across Hyderabad, Telangana, and Andhra Pradesh with unmatched precision and artistry.
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -182,7 +182,7 @@ const Footer = () => {
         <div className="border-t border-gold/15 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gold-light/60">
           <p className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-gold/70" />
-            © {new Date().getFullYear()} Maharsha Events. All rights reserved.
+            © {new Date().getFullYear()} Maharsha Events • Founded in 2018. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <Link

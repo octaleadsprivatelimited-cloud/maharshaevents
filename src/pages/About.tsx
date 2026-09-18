@@ -34,7 +34,7 @@ const About = () => {
             transition={{ delay: 0.2 }}
             className="text-gold-light/60 mt-6 max-w-2xl mx-auto text-lg"
           >
-            With over 10 years of experience, we've been turning ordinary occasions
+            Founded in 2018, we've been turning ordinary occasions
             into extraordinary memories across India.
           </motion.p>
         </div>
@@ -69,7 +69,7 @@ const About = () => {
                 A Passion for Perfection
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Founded in 2012, Maharsha Events began with a simple belief: every celebration
+                Founded in 2018, Maharsha Events began with a simple belief: every celebration
                 deserves to be exceptional. What started as a small wedding planning venture has
                 blossomed into one of India's most trusted event management companies.
               </p>
