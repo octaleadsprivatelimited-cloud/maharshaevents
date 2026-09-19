@@ -179,12 +179,28 @@ const Footer = () => {
         </div>
 
         {/* Bottom copyright & attribution bar */}
-        <div className="border-t border-gold/15 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gold-light/60">
-          <p className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-gold/70" />
-            © {new Date().getFullYear()} Maharsha Events • Founded in 2018. All rights reserved.
+        <div className="border-t border-gold/15 pt-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gold-light/60">
+          <p className="flex items-center justify-center md:justify-start gap-1.5 order-2 md:order-1">
+            <Sparkles className="w-3.5 h-3.5 text-gold/70 shrink-0" />
+            © {new Date().getFullYear()} Maharsha Events • All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
+
+          <div className="flex items-center justify-center text-center order-1 md:order-2">
+            <p className="inline-flex items-center gap-1">
+              <span>Designed by</span>
+              <a
+                href="https://octaleads.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold font-semibold hover:text-gold-light transition-colors inline-flex items-center gap-0.5 group"
+              >
+                <span>Octaleads</span>
+                <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-end gap-5 order-3">
             <Link
               to="/admin"
               className="text-gold-light/40 hover:text-gold transition-colors inline-flex items-center gap-1 text-[11px]"
@@ -193,18 +209,6 @@ const Footer = () => {
               <Lock className="w-3 h-3 text-gold/60" />
               <span>Admin</span>
             </Link>
-            <p>
-              Designed by{" "}
-              <a
-                href="https://octaleads.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold font-medium hover:text-gold-light transition-colors inline-flex items-center gap-0.5"
-              >
-                Octaleads
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </p>
           </div>
         </div>
       </div>

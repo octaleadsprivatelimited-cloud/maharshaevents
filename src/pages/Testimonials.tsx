@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
@@ -16,6 +17,12 @@ const testimonials = [
 const Testimonials = () => {
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Client Reviews & Testimonials | Event Management Hyderabad | Maharsha Events"
+        description="Read 500+ client reviews and ratings for Maharsha Events. Rated 4.9/5 for luxury weddings, corporate events, and stage decoration in Hyderabad, Telangana."
+        keywords="event management reviews hyderabad, wedding planner ratings hyderabad, maharsha events reviews"
+        canonical="https://maharshaevents.com/testimonials"
+      />
       <Navbar />
 
       <section className="relative pt-32 pb-20">

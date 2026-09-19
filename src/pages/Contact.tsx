@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,8 +59,43 @@ const Contact = () => {
     }
   };
 
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://maharshaevents.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Contact",
+            "item": "https://maharshaevents.com/contact"
+          }
+        ]
+      },
+      {
+        "@type": "ContactPage",
+        "name": "Contact Maharsha Events Hyderabad",
+        "description": "Contact Maharsha Events for wedding planning and event management inquiries in Hyderabad, Telangana."
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Contact Maharsha Events | Event Management Company Hyderabad"
+        description="Get in touch with Maharsha Events in Hyderabad for wedding planning, corporate events, and stage decoration quotes. Call +91 7893330301 or visit our Bandlaguda Jagir office."
+        keywords="contact maharsha events, event management office hyderabad, wedding planner phone number hyderabad, hire event planners hyderabad"
+        canonical="https://maharshaevents.com/contact"
+        schemaJson={contactSchema}
+      />
       <Navbar />
 
       <section className="relative pt-32 pb-20">

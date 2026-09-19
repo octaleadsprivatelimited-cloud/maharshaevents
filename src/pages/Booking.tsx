@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,6 +76,12 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Book Event Planning & Wedding Decor in Hyderabad | Maharsha Events"
+        description="Book your event in Hyderabad with Maharsha Events. Instant custom proposals for luxury weddings, corporate summits, and stage decoration across Telangana & AP."
+        keywords="book event planner hyderabad, wedding planner booking hyderabad, hire event decorators hyderabad"
+        canonical="https://maharshaevents.com/booking"
+      />
       <Navbar />
 
       <section className="relative pt-32 pb-20">

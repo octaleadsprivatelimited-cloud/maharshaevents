@@ -2,29 +2,30 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
+import SEOHead from "@/components/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGalleryImages, useVideos } from "@/lib/useFirebaseData";
 import { extractYouTubeId } from "@/lib/youtube";
 import { ImageIcon, Video, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 const DEFAULT_PORTFOLIO_IMAGES = [
-  { src: "/images/luxury-mandap-stage.webp", alt: "Royal Mandap Stage Decor", category: "Wedding" },
-  { src: "/images/mandap-decor.webp", alt: "Traditional Telugu Wedding Mandapam", category: "Wedding" },
-  { src: "/images/crystal-chandelier-arch.webp", alt: "Crystal Chandelier Grand Floral Walkway", category: "Decoration" },
-  { src: "/images/sangeet-truss-stage.webp", alt: "Grand Sangeet & Reception Circular Truss Stage", category: "Entertainment" },
-  { src: "/images/neon-tunnel-arch.webp", alt: "Illuminated Geometric Tunnel Entrance Walkway", category: "Decoration" },
-  { src: "/images/sangeet-lounge-stage.webp", alt: "Sangeet Lounge Stage with Floral Rings & Backlit Panels", category: "Entertainment" },
-  { src: "/images/luxury-velvet-seating.webp", alt: "Royal Velvet VIP Lounge & Floral Gazebo", category: "Party" },
-  { src: "/images/night-lawn-signage.webp", alt: "Outdoor Night Lawn Custom Signage & Festoon Lighting", category: "Decoration" },
-  { src: "/images/elephant-pillar.webp", alt: "Carved Elephant Floral Pillars", category: "Decoration" },
-  { src: "/images/dj-stage-setup.webp", alt: "Boombox Themed Live DJ Console & Stage", category: "Entertainment" },
-  { src: "/images/neon-wings-entrance.webp", alt: "Custom Neon Wings Glow Entrance Arch", category: "Decoration" },
-  { src: "/images/neon-bar-setup.webp", alt: "Illuminated Neon Lounge & Cocktail Bar", category: "Party" },
-  { src: "/images/grand-wedding-hall.webp", alt: "Grand Ballroom & Convention Hall", category: "Venue" },
-  { src: "/images/lotus-urli-decor.webp", alt: "Traditional Lotus Urli Floral Entrance", category: "Decoration" },
-  { src: "/images/hero-bg.webp", alt: "Golden Grand Stage Setting", category: "Wedding" },
-  { src: "/images/decoration.webp", alt: "Exquisite Floral Installations", category: "Decoration" },
-  { src: "/images/venue.webp", alt: "Curated Luxury Event Venue", category: "Venue" },
+  { src: "/images/luxury-mandap-stage.webp", alt: "Royal Telugu Wedding Mandap Stage Decor Hyderabad", category: "Wedding" },
+  { src: "/images/mandap-decor.webp", alt: "Traditional Vedic Wedding Mandapam Setup Banjara Hills Hyderabad", category: "Wedding" },
+  { src: "/images/crystal-chandelier-arch.webp", alt: "Crystal Chandelier Grand Floral Walkway Jubilee Hills Hyderabad", category: "Decoration" },
+  { src: "/images/sangeet-truss-stage.webp", alt: "Grand Sangeet & Reception Circular Truss Stage Setup Hyderabad", category: "Entertainment" },
+  { src: "/images/neon-tunnel-arch.webp", alt: "Illuminated Geometric Tunnel Entrance Walkway Hyderabad", category: "Decoration" },
+  { src: "/images/sangeet-lounge-stage.webp", alt: "Sangeet Lounge Stage with Floral Rings & Backlit Panels Hyderabad", category: "Entertainment" },
+  { src: "/images/luxury-velvet-seating.webp", alt: "Royal Velvet VIP Lounge & Floral Gazebo Hyderabad", category: "Party" },
+  { src: "/images/night-lawn-signage.webp", alt: "Outdoor Night Lawn Custom Signage Moinabad Farmhouse Hyderabad", category: "Decoration" },
+  { src: "/images/elephant-pillar.webp", alt: "Carved Wooden Elephant Floral Pillars Hyderabad", category: "Decoration" },
+  { src: "/images/dj-stage-setup.webp", alt: "Boombox Themed Live DJ Console & Stage Hyderabad", category: "Entertainment" },
+  { src: "/images/neon-wings-entrance.webp", alt: "Custom Neon Wings Glow Entrance Arch Hyderabad", category: "Decoration" },
+  { src: "/images/neon-bar-setup.webp", alt: "Illuminated Neon Cocktail Lounge & Bar Setup Hyderabad", category: "Party" },
+  { src: "/images/grand-wedding-hall.webp", alt: "Grand Ballroom & Luxury Convention Hall Hyderabad", category: "Venue" },
+  { src: "/images/lotus-urli-decor.webp", alt: "Traditional Brass Lotus Urli Floral Entrance Hyderabad", category: "Decoration" },
+  { src: "/images/hero-bg.webp", alt: "Golden Grand Stage Setting Hyderabad", category: "Wedding" },
+  { src: "/images/decoration.webp", alt: "Exquisite Fresh Floral Stage Installations Hyderabad", category: "Decoration" },
+  { src: "/images/venue.webp", alt: "Curated Luxury Event Venue & Farmhouse Hyderabad", category: "Venue" },
 ];
 
 const Portfolio = () => {
@@ -88,22 +89,66 @@ const Portfolio = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedIndex, filteredPhotos.length]);
 
+  const portfolioSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://maharshaevents.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Portfolio",
+            "item": "https://maharshaevents.com/portfolio"
+          }
+        ]
+      },
+      {
+        "@type": "ImageGallery",
+        "name": "Maharsha Events Hyderabad Stage Decor & Wedding Gallery",
+        "description": "Showcase of luxury Telugu wedding mandapams, Sangeet dance stages, floral installations, and corporate setups in Hyderabad."
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Event & Wedding Stage Decor Portfolio in Hyderabad | Maharsha Events"
+        description="Explore 500+ photos of royal Telugu wedding mandapams, modern Sangeet truss stages, floral entry arches, and corporate event setups in Hyderabad by Maharsha Events."
+        keywords="wedding stage decor hyderabad, mandap decoration photos hyderabad, sangeet stage setup jubilee hills, corporate stage decor hitec city, wedding decorator portfolio hyderabad, maharsha events portfolio"
+        canonical="https://maharshaevents.com/portfolio"
+        schemaJson={portfolioSchema}
+      />
       <Navbar />
 
       <section className="relative pt-32 pb-20">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/venue.webp')" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/85 via-navy-dark/75 to-navy-dark/90" />
         <div className="relative z-10 container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-block mb-3 px-4 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs font-bold tracking-[0.2em] uppercase"
+          >
+            Hyderabad Celebrations Showcase
+          </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-5xl md:text-6xl font-bold text-gold-light"
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-white"
           >
-            Our <span className="text-gradient-gold">Portfolio</span>
+            Our Event & Stage <span className="text-gradient-gold">Portfolio</span>
           </motion.h1>
-          <p className="text-gold-light/70 mt-3 text-lg">Photos and event highlights</p>
+          <p className="text-gold-light/75 mt-3 text-base sm:text-lg max-w-2xl mx-auto">
+            Live captures from 500+ luxury weddings, corporate summits, and celebrations across Hyderabad, Telangana & AP.
+          </p>
         </div>
       </section>
 
